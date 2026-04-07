@@ -12,53 +12,178 @@
       background: #0f1117;
       color: #e2e8f0;
       min-height: 100vh;
+      display: flex;
+      flex-direction: column;
     }
 
     /* ── Header ───────────────────────────────────────── */
     header {
       background: #1a1d27;
       border-bottom: 1px solid #2d3148;
-      padding: 0 40px;
+      padding: 0 24px;
       display: flex;
       align-items: stretch;
-      gap: 0;
+      flex-shrink: 0;
+      height: 52px;
+      z-index: 20;
     }
+
     .header-brand {
       display: flex; align-items: center; gap: 10px;
-      padding: 16px 0; margin-right: 32px;
+      margin-right: 28px;
     }
     .dot { width: 8px; height: 8px; border-radius: 50%; background: #4ade80; }
-    header h1 { font-size: 1.2rem; font-weight: 600; letter-spacing: -0.02em; white-space: nowrap; }
+    header h1 { font-size: 1.1rem; font-weight: 600; letter-spacing: -0.02em; white-space: nowrap; }
 
-    /* ── Tabs ─────────────────────────────────────────── */
-    .tabs {
-      display: flex; align-items: stretch; gap: 0;
-    }
+    .tabs { display: flex; align-items: stretch; gap: 0; flex: 1; }
     .tab-btn {
       background: none; border: none; color: #64748b;
-      font-size: 0.88rem; font-weight: 500;
-      padding: 0 20px; cursor: pointer;
+      font-size: 0.875rem; font-weight: 500;
+      padding: 0 18px; cursor: pointer;
       border-bottom: 2px solid transparent;
       transition: color 0.15s, border-color 0.15s;
-      white-space: nowrap;
     }
-    .tab-btn:hover { color: #e2e8f0; }
+    .tab-btn:hover  { color: #e2e8f0; }
     .tab-btn.active { color: #e2e8f0; border-bottom-color: #6366f1; }
 
-    /* ── Layout ───────────────────────────────────────── */
-    .container { max-width: 1300px; margin: 0 auto; padding: 36px 24px; }
+    .header-user {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 0.82rem; color: #64748b;
+    }
+    .header-user strong { color: #94a3b8; }
+    .logout-btn {
+      background: none; border: 1px solid #2d3148; border-radius: 6px;
+      color: #64748b; font-size: 0.78rem; padding: 4px 10px;
+      cursor: pointer; transition: border-color 0.15s, color 0.15s;
+    }
+    .logout-btn:hover { border-color: #4a4f6a; color: #94a3b8; }
 
-    .tab-panel { display: none; }
+    /* ── Body layout ──────────────────────────────────── */
+    .app-body {
+      display: flex;
+      flex: 1;
+      min-height: 0;
+    }
+
+    /* ── Sidebar ──────────────────────────────────────── */
+    .sidebar {
+      width: 236px;
+      flex-shrink: 0;
+      background: #1a1d27;
+      border-right: 1px solid #2d3148;
+      display: flex;
+      flex-direction: column;
+      position: sticky;
+      top: 0;
+      height: calc(100vh - 52px);
+      overflow-y: auto;
+    }
+
+    .sidebar-header {
+      padding: 14px 14px 10px;
+      border-bottom: 1px solid #2d3148;
+      flex-shrink: 0;
+    }
+
+    .sidebar-title {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      color: #4a5568;
+      margin-bottom: 10px;
+    }
+
+    .new-portfolio-btn {
+      display: flex; align-items: center; gap: 7px;
+      width: 100%; background: #2d3148; border: none;
+      color: #94a3b8; font-size: 0.82rem; font-weight: 500;
+      padding: 8px 11px; border-radius: 7px;
+      cursor: pointer; transition: background 0.15s, color 0.15s;
+      text-align: left;
+    }
+    .new-portfolio-btn:hover { background: #363b56; color: #e2e8f0; }
+    .new-portfolio-btn .plus { font-size: 1rem; line-height: 1; }
+
+    .sidebar-list {
+      flex: 1;
+      padding: 8px 8px;
+      overflow-y: auto;
+    }
+
+    .sidebar-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 10px;
+      border-radius: 7px;
+      cursor: pointer;
+      transition: background 0.12s;
+      position: relative;
+      group: sidebar-item;
+    }
+    .sidebar-item:hover { background: #232638; }
+    .sidebar-item.active { background: #1e2245; }
+
+    .sidebar-item-name {
+      flex: 1;
+      font-size: 0.855rem;
+      color: #cbd5e1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      min-width: 0;
+    }
+    .sidebar-item.active .sidebar-item-name { color: #e2e8f0; font-weight: 500; }
+
+    .sidebar-item-actions {
+      display: none;
+      align-items: center;
+      gap: 2px;
+      flex-shrink: 0;
+    }
+    .sidebar-item:hover .sidebar-item-actions { display: flex; }
+
+    .sidebar-icon-btn {
+      background: none; border: none; color: #64748b;
+      font-size: 0.78rem; padding: 3px 5px; border-radius: 4px;
+      cursor: pointer; line-height: 1;
+      transition: background 0.12s, color 0.12s;
+    }
+    .sidebar-icon-btn:hover { background: #2d3148; color: #e2e8f0; }
+    .sidebar-icon-btn.danger:hover { background: #3b1212; color: #f87171; }
+
+    /* inline rename input in sidebar */
+    .sidebar-rename-input {
+      flex: 1; min-width: 0;
+      background: #0f1117; border: 1px solid #6366f1;
+      border-radius: 5px; color: #e2e8f0;
+      font-size: 0.855rem; padding: 2px 6px;
+    }
+    .sidebar-rename-input:focus { outline: none; }
+
+    .sidebar-empty {
+      padding: 24px 14px;
+      font-size: 0.8rem;
+      color: #4a5568;
+      text-align: center;
+      line-height: 1.5;
+    }
+
+    /* ── Main content ─────────────────────────────────── */
+    .main-content { flex: 1; min-width: 0; overflow-y: auto; }
+    .container    { max-width: 1200px; margin: 0 auto; padding: 28px 24px; }
+
+    .tab-panel        { display: none; }
     .tab-panel.active { display: block; }
 
     /* ── Buttons ──────────────────────────────────────── */
     .btn {
       display: inline-flex; align-items: center; gap: 6px;
-      padding: 9px 18px; border-radius: 8px; border: none;
+      padding: 8px 16px; border-radius: 8px; border: none;
       cursor: pointer; font-size: 0.875rem; font-weight: 500;
       transition: opacity 0.15s; white-space: nowrap;
     }
-    .btn:hover { opacity: 0.85; }
+    .btn:hover    { opacity: 0.85; }
     .btn:disabled { opacity: 0.35; cursor: not-allowed; }
     .btn-primary { background: #6366f1; color: #fff; }
     .btn-ghost   { background: #2d3148; color: #94a3b8; }
@@ -66,106 +191,127 @@
     .btn-danger:hover { background: #3b1212; opacity: 1; }
     .btn-sm { padding: 5px 10px; font-size: 0.78rem; border-radius: 6px; }
 
-    /* ── Shared panel style ───────────────────────────── */
+    /* ── Panel ────────────────────────────────────────── */
     .panel {
       background: #1a1d27; border: 1px solid #2d3148;
-      border-radius: 12px; margin-bottom: 28px; overflow: hidden;
+      border-radius: 12px; margin-bottom: 24px; overflow: hidden;
     }
     .panel-header {
-      display: flex; align-items: center; gap: 12px;
-      padding: 16px 20px; border-bottom: 1px solid #2d3148;
+      display: flex; align-items: center; gap: 10px;
+      padding: 14px 18px; border-bottom: 1px solid #2d3148;
     }
-    .panel-header h2 { font-size: 1rem; font-weight: 600; flex: 1; }
+    .panel-header h2 { font-size: 0.95rem; font-weight: 600; flex: 1; }
 
     /* ── Upload strip ─────────────────────────────────── */
     .upload-strip {
       display: flex; align-items: center; gap: 10px;
-      padding: 14px 20px; border-bottom: 1px solid #2d3148;
+      padding: 12px 18px; border-bottom: 1px solid #2d3148;
       background: #151720;
     }
     .upload-strip input[type="file"] { display: none; }
     .upload-file-label {
       display: inline-flex; align-items: center; gap: 6px;
-      padding: 7px 14px; border-radius: 7px;
+      padding: 6px 12px; border-radius: 7px;
       background: #2d3148; color: #94a3b8;
-      font-size: 0.85rem; font-weight: 500;
+      font-size: 0.82rem; font-weight: 500;
       cursor: pointer; transition: opacity 0.15s;
       border: 1px solid #3a3f5c;
     }
     .upload-file-label:hover { opacity: 0.8; }
-    .upload-file-name { font-size: 0.82rem; color: #64748b; flex: 1; }
-    .upload-status { font-size: 0.78rem; }
+    .upload-file-name { font-size: 0.8rem; color: #64748b; flex: 1; }
+    .upload-status    { font-size: 0.76rem; }
     .upload-status.ok  { color: #4ade80; }
     .upload-status.err { color: #f87171; }
 
     /* ── Editor table ─────────────────────────────────── */
-    .editor-table-wrap { overflow-x: auto; }
-
     table.editor-table {
-      width: 100%; border-collapse: collapse; font-size: 0.88rem;
+      width: 100%; border-collapse: collapse; font-size: 0.875rem;
     }
     table.editor-table thead th {
-      text-align: left; padding: 10px 16px;
-      font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em;
+      text-align: left; padding: 9px 16px;
+      font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em;
       color: #64748b; background: #151720; border-bottom: 1px solid #2d3148;
     }
     table.editor-table tbody tr { border-bottom: 1px solid #1e2235; }
     table.editor-table tbody tr:last-child { border-bottom: none; }
     table.editor-table tbody tr:hover { background: #1e2235; }
-    table.editor-table td { padding: 8px 16px; vertical-align: middle; }
-    .editor-ticker { font-weight: 600; font-size: 0.9rem; }
+    table.editor-table td { padding: 7px 16px; vertical-align: middle; }
+    .editor-ticker { font-weight: 600; }
 
     .weight-input-wrap { display: flex; align-items: center; gap: 6px; }
     .weight-input {
-      width: 80px; background: #0f1117; border: 1px solid #2d3148;
-      border-radius: 6px; color: #e2e8f0; font-size: 0.88rem;
-      padding: 5px 8px; text-align: right; transition: border-color 0.15s;
+      width: 76px; background: #0f1117; border: 1px solid #2d3148;
+      border-radius: 6px; color: #e2e8f0; font-size: 0.875rem;
+      padding: 4px 7px; text-align: right; transition: border-color 0.15s;
     }
     .weight-input:focus { outline: none; border-color: #6366f1; }
-    .weight-input-suffix { color: #64748b; font-size: 0.82rem; }
+    .weight-suffix { color: #64748b; font-size: 0.8rem; }
 
     /* ── Add row ──────────────────────────────────────── */
     .add-row {
-      display: flex; align-items: center; gap: 10px;
-      padding: 12px 16px; border-top: 1px solid #2d3148;
-      background: #151720;
+      display: flex; align-items: center; gap: 9px;
+      padding: 10px 16px; border-top: 1px solid #2d3148; background: #151720;
     }
     .add-row input[type="text"],
     .add-row input[type="number"] {
       background: #1a1d27; border: 1px solid #2d3148;
-      border-radius: 6px; color: #e2e8f0; font-size: 0.88rem;
-      padding: 7px 10px; transition: border-color 0.15s;
+      border-radius: 6px; color: #e2e8f0; font-size: 0.875rem;
+      padding: 6px 9px; transition: border-color 0.15s;
     }
     .add-row input:focus { outline: none; border-color: #6366f1; }
-    .add-row input[type="text"]   { width: 110px; text-transform: uppercase; }
-    .add-row input[type="number"] { width: 90px; }
-    .add-row-label { font-size: 0.8rem; color: #64748b; }
+    .add-row input[type="text"]   { width: 100px; text-transform: uppercase; }
+    .add-row input[type="number"] { width: 88px; }
+    .add-row-label { font-size: 0.78rem; color: #64748b; }
 
     /* ── Weight summary ───────────────────────────────── */
     .weight-summary {
-      display: flex; align-items: center; gap: 12px;
-      padding: 12px 20px; border-top: 1px solid #2d3148;
-      font-size: 0.82rem;
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 18px; border-top: 1px solid #2d3148; font-size: 0.8rem;
     }
     .weight-summary .label { color: #64748b; }
     .weight-total          { font-weight: 600; }
     .weight-total.over     { color: #f87171; }
     .weight-total.under    { color: #fbbf24; }
     .weight-total.full     { color: #4ade80; }
-    .weight-hint           { color: #64748b; font-size: 0.76rem; flex: 1; }
+    .weight-hint           { color: #64748b; font-size: 0.74rem; flex: 1; }
 
-    .analyze-row {
+    /* ── Save popover ─────────────────────────────────── */
+    .save-row {
       display: flex; justify-content: flex-end; align-items: center;
-      gap: 12px; padding: 14px 20px; border-top: 1px solid #2d3148;
+      gap: 10px; padding: 12px 18px; border-top: 1px solid #2d3148;
+      position: relative;
     }
+
+    .save-popover {
+      display: none;
+      position: absolute; bottom: calc(100% + 6px); right: 18px;
+      background: #1e2235; border: 1px solid #2d3148;
+      border-radius: 9px; padding: 14px 14px;
+      width: 260px; z-index: 30;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+    }
+    .save-popover.open { display: block; }
+    .save-popover label {
+      display: block; font-size: 0.72rem; color: #64748b;
+      text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 6px;
+    }
+    .save-popover input {
+      width: 100%; background: #0f1117; border: 1px solid #2d3148;
+      border-radius: 6px; color: #e2e8f0; font-size: 0.875rem;
+      padding: 7px 9px; margin-bottom: 10px;
+      transition: border-color 0.15s;
+    }
+    .save-popover input:focus { outline: none; border-color: #6366f1; }
+    .save-popover-actions { display: flex; gap: 7px; justify-content: flex-end; }
+    .save-error { color: #f87171; font-size: 0.76rem; margin-bottom: 8px; display: none; }
 
     /* ── Loading ──────────────────────────────────────── */
     .loading {
       display: none; flex-direction: column; align-items: center;
-      gap: 14px; padding: 48px; color: #94a3b8;
+      gap: 12px; padding: 44px; color: #94a3b8;
     }
     .spinner {
-      width: 32px; height: 32px;
+      width: 30px; height: 30px;
       border: 3px solid #2d3148; border-top-color: #6366f1;
       border-radius: 50%; animation: spin 0.8s linear infinite;
     }
@@ -174,32 +320,32 @@
     /* ── Error banner ─────────────────────────────────── */
     .error-banner {
       display: none; background: #3b1212; border: 1px solid #7f1d1d;
-      color: #fca5a5; padding: 12px 16px; border-radius: 8px;
-      margin-bottom: 20px; font-size: 0.88rem;
+      color: #fca5a5; padding: 11px 14px; border-radius: 8px;
+      margin-bottom: 18px; font-size: 0.86rem;
     }
 
     /* ── Results ──────────────────────────────────────── */
     .results-section { display: none; }
     .results-header {
       display: flex; justify-content: space-between; align-items: center;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
     }
-    .results-header h2 { font-size: 1.05rem; font-weight: 600; }
-    .as-of { font-size: 0.76rem; color: #64748b; }
+    .results-header h2 { font-size: 1rem; font-weight: 600; }
+    .as-of { font-size: 0.74rem; color: #64748b; }
 
     .cards {
       display: grid; grid-template-columns: repeat(4, 1fr);
-      gap: 14px; margin-bottom: 28px;
+      gap: 12px; margin-bottom: 24px;
     }
     .card {
       background: #1a1d27; border: 1px solid #2d3148;
-      border-radius: 10px; padding: 18px 22px;
+      border-radius: 10px; padding: 16px 20px;
     }
     .card .label {
-      font-size: 0.72rem; text-transform: uppercase;
-      letter-spacing: 0.08em; color: #64748b; margin-bottom: 8px;
+      font-size: 0.7rem; text-transform: uppercase;
+      letter-spacing: 0.08em; color: #64748b; margin-bottom: 7px;
     }
-    .card .value { font-size: 1.75rem; font-weight: 700; letter-spacing: -0.03em; }
+    .card .value { font-size: 1.7rem; font-weight: 700; letter-spacing: -0.03em; }
 
     .positive { color: #4ade80; }
     .negative { color: #f87171; }
@@ -211,20 +357,20 @@
     }
     .table-header-row {
       display: flex; justify-content: space-between; align-items: center;
-      padding: 14px 20px; border-bottom: 1px solid #2d3148;
+      padding: 12px 18px; border-bottom: 1px solid #2d3148;
     }
-    .table-header-row h2 { font-size: 0.95rem; font-weight: 600; }
+    .table-header-row h2 { font-size: 0.9rem; font-weight: 600; }
     .total-weight-badge {
-      font-size: 0.76rem; background: #1e2035; border: 1px solid #2d3148;
+      font-size: 0.74rem; background: #1e2035; border: 1px solid #2d3148;
       border-radius: 20px; padding: 3px 10px; color: #94a3b8;
     }
 
     table.results-table {
-      width: 100%; border-collapse: collapse; font-size: 0.88rem;
+      width: 100%; border-collapse: collapse; font-size: 0.875rem;
     }
     table.results-table thead th {
-      text-align: left; padding: 10px 20px;
-      font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em;
+      text-align: left; padding: 9px 18px;
+      font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em;
       color: #64748b; background: #151720; border-bottom: 1px solid #2d3148;
       white-space: nowrap;
     }
@@ -232,43 +378,37 @@
     table.results-table tbody tr { border-bottom: 1px solid #1e2235; transition: background 0.1s; }
     table.results-table tbody tr:last-child { border-bottom: none; }
     table.results-table tbody tr:hover { background: #1e2235; }
-    table.results-table tbody td { padding: 13px 20px; vertical-align: middle; }
+    table.results-table tbody td { padding: 11px 18px; vertical-align: middle; }
     table.results-table tbody td.right { text-align: right; font-variant-numeric: tabular-nums; }
 
     .ticker-cell strong { font-weight: 600; display: block; }
-    .ticker-cell small  { color: #64748b; font-size: 0.76rem; }
+    .ticker-cell small  { color: #64748b; font-size: 0.74rem; }
 
     .weight-bar-wrap { display: flex; align-items: center; gap: 8px; }
     .weight-bar      { flex: 1; height: 4px; background: #2d3148; border-radius: 2px; overflow: hidden; }
     .weight-bar-fill { height: 100%; background: #6366f1; border-radius: 2px; }
-    .weight-pct      { font-size: 0.78rem; color: #94a3b8; width: 42px; text-align: right; flex-shrink: 0; }
+    .weight-pct      { font-size: 0.76rem; color: #94a3b8; width: 40px; text-align: right; flex-shrink: 0; }
 
     .pill {
-      display: inline-block; padding: 3px 8px; border-radius: 4px;
-      font-size: 0.8rem; font-weight: 500;
+      display: inline-block; padding: 2px 7px; border-radius: 4px;
+      font-size: 0.78rem; font-weight: 500;
     }
     .pill.positive { background: rgba(74,222,128,0.1);  color: #4ade80; }
     .pill.negative { background: rgba(248,113,113,0.1); color: #f87171; }
     .pill.neutral  { background: rgba(148,163,184,0.1); color: #94a3b8; }
 
     /* ── Alerts tab ───────────────────────────────────── */
-
-    /* Triggered banner */
-    .triggered-banner {
-      display: none;
-      border-radius: 10px; overflow: hidden;
-      margin-bottom: 24px;
-    }
+    .triggered-banner { display: none; border-radius: 10px; overflow: hidden; margin-bottom: 22px; }
     .triggered-banner-header {
       display: flex; align-items: center; gap: 10px;
-      padding: 14px 20px; background: #3b1212; border: 1px solid #7f1d1d;
+      padding: 12px 18px; background: #3b1212; border: 1px solid #7f1d1d;
       border-bottom: none; border-radius: 10px 10px 0 0;
     }
-    .triggered-banner-header h3 { font-size: 0.95rem; font-weight: 600; color: #fca5a5; flex: 1; }
+    .triggered-banner-header h3 { font-size: 0.9rem; font-weight: 600; color: #fca5a5; flex: 1; }
     .triggered-count {
       background: #f87171; color: #0f1117;
-      border-radius: 20px; padding: 2px 9px;
-      font-size: 0.75rem; font-weight: 700;
+      border-radius: 20px; padding: 1px 8px;
+      font-size: 0.72rem; font-weight: 700;
     }
     .triggered-list {
       border: 1px solid #7f1d1d; border-top: none;
@@ -276,47 +416,43 @@
     }
 
     table.alerts-table {
-      width: 100%; border-collapse: collapse; font-size: 0.88rem;
+      width: 100%; border-collapse: collapse; font-size: 0.875rem;
     }
     table.alerts-table thead th {
-      text-align: left; padding: 10px 20px;
-      font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em;
+      text-align: left; padding: 9px 18px;
+      font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em;
       color: #64748b; background: #151720; border-bottom: 1px solid #2d3148;
-      white-space: nowrap;
     }
     table.alerts-table thead th.right { text-align: right; }
     table.alerts-table tbody tr { border-bottom: 1px solid #1e2235; transition: background 0.1s; }
     table.alerts-table tbody tr:last-child { border-bottom: none; }
     table.alerts-table tbody tr:hover { background: #1e2235; }
-    table.alerts-table tbody td { padding: 12px 20px; vertical-align: middle; }
+    table.alerts-table tbody td { padding: 11px 18px; vertical-align: middle; }
     table.alerts-table tbody td.right { text-align: right; font-variant-numeric: tabular-nums; }
-
-    /* triggered row highlight */
     table.alerts-table tbody tr.triggered-row { background: rgba(248,113,113,0.06); }
     table.alerts-table tbody tr.triggered-row:hover { background: rgba(248,113,113,0.1); }
 
-    /* Add alert form */
     .alert-form {
-      display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
-      padding: 14px 20px; border-top: 1px solid #2d3148; background: #151720;
+      display: flex; align-items: center; gap: 9px; flex-wrap: wrap;
+      padding: 12px 18px; border-top: 1px solid #2d3148; background: #151720;
     }
     .alert-form input[type="text"],
     .alert-form input[type="number"],
     .alert-form select {
       background: #1a1d27; border: 1px solid #2d3148;
-      border-radius: 6px; color: #e2e8f0; font-size: 0.88rem;
-      padding: 7px 10px; transition: border-color 0.15s;
+      border-radius: 6px; color: #e2e8f0; font-size: 0.875rem;
+      padding: 6px 9px; transition: border-color 0.15s;
     }
     .alert-form input:focus,
     .alert-form select:focus { outline: none; border-color: #6366f1; }
-    .alert-form input[type="text"]   { width: 100px; text-transform: uppercase; }
-    .alert-form input[type="number"] { width: 90px; }
-    .alert-form select               { width: 160px; cursor: pointer; }
-    .alert-form-label { font-size: 0.8rem; color: #64748b; }
+    .alert-form input[type="text"]   { width: 96px; text-transform: uppercase; }
+    .alert-form input[type="number"] { width: 86px; }
+    .alert-form select               { width: 154px; cursor: pointer; }
+    .alert-form-label                { font-size: 0.78rem; color: #64748b; }
 
     .direction-badge {
-      display: inline-block; padding: 2px 8px; border-radius: 4px;
-      font-size: 0.76rem; font-weight: 600;
+      display: inline-block; padding: 2px 7px; border-radius: 4px;
+      font-size: 0.74rem; font-weight: 600;
     }
     .direction-badge.up     { background: rgba(74,222,128,0.1);  color: #4ade80; }
     .direction-badge.down   { background: rgba(248,113,113,0.1); color: #f87171; }
@@ -324,18 +460,17 @@
 
     .check-row {
       display: flex; justify-content: space-between; align-items: center;
-      padding: 14px 20px; border-top: 1px solid #2d3148;
+      padding: 12px 18px; border-top: 1px solid #2d3148;
     }
-    .check-as-of { font-size: 0.76rem; color: #64748b; }
+    .check-as-of { font-size: 0.74rem; color: #64748b; }
 
     .empty-state {
-      padding: 48px 20px; text-align: center;
-      color: #64748b; font-size: 0.88rem;
+      padding: 44px 18px; text-align: center; color: #64748b; font-size: 0.86rem;
     }
 
-    @media (max-width: 768px) {
-      .cards { grid-template-columns: repeat(2, 1fr); }
-      header { padding: 0 16px; }
+    @media (max-width: 860px) {
+      .sidebar { display: none; }
+      .cards   { grid-template-columns: repeat(2, 1fr); }
     }
   </style>
 </head>
@@ -348,590 +483,792 @@
   </div>
   <nav class="tabs">
     <button class="tab-btn active" data-tab="monitor">Monitor</button>
-    <button class="tab-btn" data-tab="alerts">Alerts</button>
+    <button class="tab-btn"        data-tab="alerts">Alerts</button>
   </nav>
+  <div class="header-user">
+    <strong>{{ username }}</strong>
+    <button class="logout-btn" id="logoutBtn">Sign out</button>
+  </div>
 </header>
 
-<div class="container">
+<div class="app-body">
 
-  <!-- ════════════════════════════════════════════════════
-       MONITOR TAB
-  ════════════════════════════════════════════════════ -->
-  <div class="tab-panel active" id="tab-monitor">
-
-    <div class="panel">
-      <div class="panel-header"><h2>Portfolio Editor</h2></div>
-
-      <div class="upload-strip">
-        <label class="upload-file-label" for="fileInput">&#8593; Import Excel</label>
-        <input type="file" id="fileInput" accept=".xlsx,.xls" />
-        <span class="upload-file-name" id="uploadFileName">No file selected</span>
-        <span class="upload-status" id="uploadStatus"></span>
-      </div>
-
-      <div class="editor-table-wrap">
-        <table class="editor-table">
-          <thead><tr><th>Ticker</th><th>Weight</th><th></th></tr></thead>
-          <tbody id="editorBody"></tbody>
-        </table>
-      </div>
-
-      <div class="add-row">
-        <span class="add-row-label">Add position:</span>
-        <input type="text"   id="addTicker" placeholder="e.g. AAPL" maxlength="10" />
-        <input type="number" id="addWeight" placeholder="Weight %" min="0" max="100" step="0.01" />
-        <button class="btn btn-ghost btn-sm" id="addBtn">+ Add</button>
-      </div>
-
-      <div class="weight-summary">
-        <span class="label">Total weight:</span>
-        <span class="weight-total" id="weightTotal">0.00%</span>
-        <span class="weight-hint" id="weightHint"></span>
-      </div>
-
-      <div class="analyze-row">
-        <button class="btn btn-primary" id="analyzeBtn" disabled>Analyze Portfolio</button>
+  <!-- ── Sidebar ──────────────────────────────────────── -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-title">Portfolios</div>
+      <button class="new-portfolio-btn" id="newPortfolioBtn">
+        <span class="plus">+</span> New Portfolio
+      </button>
+    </div>
+    <div class="sidebar-list" id="sidebarList">
+      <div class="sidebar-empty" id="sidebarEmpty">
+        No saved portfolios yet.<br/>Build one and click Save.
       </div>
     </div>
+  </aside>
 
-    <div class="error-banner" id="monitorError"></div>
-    <div class="loading" id="monitorLoading">
-      <div class="spinner"></div>
-      <span>Fetching market data…</span>
-    </div>
+  <!-- ── Main content ─────────────────────────────────── -->
+  <div class="main-content">
+    <div class="container">
 
-    <div class="results-section" id="monitorResults">
-      <div class="results-header">
-        <h2>Portfolio Performance</h2>
-        <div style="display:flex;align-items:center;gap:12px">
-          <span class="as-of" id="monitorAsOf"></span>
-          <button class="btn btn-ghost btn-sm" id="reanalyzeBtn">Re-analyze</button>
+      <!-- ══ MONITOR TAB ══ -->
+      <div class="tab-panel active" id="tab-monitor">
+
+        <div class="panel">
+          <div class="panel-header">
+            <h2 id="editorTitle">Portfolio Editor</h2>
+          </div>
+
+          <div class="upload-strip">
+            <label class="upload-file-label" for="fileInput">&#8593; Import Excel</label>
+            <input type="file" id="fileInput" accept=".xlsx,.xls" />
+            <span class="upload-file-name" id="uploadFileName">No file selected</span>
+            <span class="upload-status"    id="uploadStatus"></span>
+          </div>
+
+          <div class="editor-table-wrap" style="overflow-x:auto">
+            <table class="editor-table">
+              <thead><tr><th>Ticker</th><th>Weight</th><th></th></tr></thead>
+              <tbody id="editorBody"></tbody>
+            </table>
+          </div>
+
+          <div class="add-row">
+            <span class="add-row-label">Add position:</span>
+            <input type="text"   id="addTicker" placeholder="e.g. AAPL" maxlength="10" />
+            <input type="number" id="addWeight" placeholder="Weight %" min="0" max="100" step="0.01" />
+            <button class="btn btn-ghost btn-sm" id="addBtn">+ Add</button>
+          </div>
+
+          <div class="weight-summary">
+            <span class="label">Total weight:</span>
+            <span class="weight-total" id="weightTotal">0.00%</span>
+            <span class="weight-hint"  id="weightHint"></span>
+          </div>
+
+          <div class="save-row">
+            <!-- Save popover -->
+            <div class="save-popover" id="savePopover">
+              <label>Portfolio name</label>
+              <input type="text" id="saveNameInput" placeholder="My Portfolio" maxlength="60" />
+              <div class="save-error" id="saveError"></div>
+              <div class="save-popover-actions">
+                <button class="btn btn-ghost btn-sm" id="saveCancelBtn">Cancel</button>
+                <button class="btn btn-primary btn-sm" id="saveConfirmBtn">Save</button>
+              </div>
+            </div>
+
+            <button class="btn btn-ghost" id="savePortfolioBtn" disabled>Save Portfolio</button>
+            <button class="btn btn-primary" id="analyzeBtn" disabled>Analyze</button>
+          </div>
         </div>
-      </div>
 
-      <div class="cards">
-        <div class="card"><div class="label">Day</div><div class="value" id="portDay">—</div></div>
-        <div class="card"><div class="label">Week</div><div class="value" id="portWeek">—</div></div>
-        <div class="card"><div class="label">Month</div><div class="value" id="portMonth">—</div></div>
-        <div class="card"><div class="label">Year to Date</div><div class="value" id="portYTD">—</div></div>
-      </div>
-
-      <div class="table-wrapper">
-        <div class="table-header-row">
-          <h2>Positions</h2>
-          <span class="total-weight-badge" id="totalWeight"></span>
+        <div class="error-banner" id="monitorError"></div>
+        <div class="loading" id="monitorLoading">
+          <div class="spinner"></div>
+          <span>Fetching market data…</span>
         </div>
-        <table class="results-table">
-          <thead>
-            <tr>
-              <th>Ticker</th>
-              <th class="right">Price</th>
-              <th>Weight</th>
-              <th class="right">Day</th>
-              <th class="right">Week</th>
-              <th class="right">Month</th>
-              <th class="right">YTD</th>
-            </tr>
-          </thead>
-          <tbody id="positionsBody"></tbody>
-        </table>
-      </div>
-    </div>
 
-  </div><!-- /tab-monitor -->
+        <div class="results-section" id="monitorResults">
+          <div class="results-header">
+            <h2>Portfolio Performance</h2>
+            <div style="display:flex;align-items:center;gap:10px">
+              <span class="as-of" id="monitorAsOf"></span>
+              <button class="btn btn-ghost btn-sm" id="reanalyzeBtn">Re-analyze</button>
+            </div>
+          </div>
 
+          <div class="cards">
+            <div class="card"><div class="label">Day</div><div class="value" id="portDay">—</div></div>
+            <div class="card"><div class="label">Week</div><div class="value" id="portWeek">—</div></div>
+            <div class="card"><div class="label">Month</div><div class="value" id="portMonth">—</div></div>
+            <div class="card"><div class="label">Year to Date</div><div class="value" id="portYTD">—</div></div>
+          </div>
 
-  <!-- ════════════════════════════════════════════════════
-       ALERTS TAB
-  ════════════════════════════════════════════════════ -->
-  <div class="tab-panel" id="tab-alerts">
-
-    <!-- Triggered banner (shown after check) -->
-    <div class="triggered-banner" id="triggeredBanner">
-      <div class="triggered-banner-header">
-        <h3>&#9888; Alerts Triggered</h3>
-        <span class="triggered-count" id="triggeredCount">0</span>
-      </div>
-      <div class="triggered-list">
-        <table class="alerts-table">
-          <thead>
-            <tr>
-              <th>Ticker</th>
-              <th class="right">Price</th>
-              <th>Direction</th>
-              <th class="right">Threshold</th>
-              <th class="right">Day Move</th>
-            </tr>
-          </thead>
-          <tbody id="triggeredBody"></tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- All configured alerts -->
-    <div class="panel">
-      <div class="panel-header">
-        <h2>Configured Alerts</h2>
-      </div>
-
-      <div id="alertsTableWrap">
-        <table class="alerts-table">
-          <thead>
-            <tr>
-              <th>Ticker</th>
-              <th>Direction</th>
-              <th class="right">Threshold</th>
-              <th class="right">Last Day Move</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody id="alertsBody"></tbody>
-        </table>
-        <div class="empty-state" id="alertsEmpty" style="display:none">
-          No alerts configured yet. Add one below.
+          <div class="table-wrapper">
+            <div class="table-header-row">
+              <h2>Positions</h2>
+              <span class="total-weight-badge" id="totalWeight"></span>
+            </div>
+            <table class="results-table">
+              <thead>
+                <tr>
+                  <th>Ticker</th>
+                  <th class="right">Price</th>
+                  <th>Weight</th>
+                  <th class="right">Day</th>
+                  <th class="right">Week</th>
+                  <th class="right">Month</th>
+                  <th class="right">YTD</th>
+                </tr>
+              </thead>
+              <tbody id="positionsBody"></tbody>
+            </table>
+          </div>
         </div>
-      </div>
 
-      <!-- Add alert form -->
-      <div class="alert-form">
-        <span class="alert-form-label">New alert:</span>
-        <input type="text"   id="alertTicker"    placeholder="Ticker"  maxlength="10" />
-        <input type="number" id="alertThreshold" placeholder="% move"  min="0.01" step="0.01" />
-        <select id="alertDirection">
-          <option value="either">Either direction</option>
-          <option value="up">Up only</option>
-          <option value="down">Down only</option>
-        </select>
-        <button class="btn btn-ghost btn-sm" id="alertAddBtn">+ Add Alert</button>
-      </div>
+      </div><!-- /tab-monitor -->
 
-      <div class="check-row">
-        <span class="check-as-of" id="alertsAsOf"></span>
-        <button class="btn btn-primary" id="checkBtn">Check Alerts Now</button>
-      </div>
-    </div>
 
-    <div class="error-banner" id="alertsError"></div>
-    <div class="loading" id="alertsLoading">
-      <div class="spinner"></div>
-      <span>Checking alerts…</span>
-    </div>
+      <!-- ══ ALERTS TAB ══ -->
+      <div class="tab-panel" id="tab-alerts">
 
-  </div><!-- /tab-alerts -->
+        <div class="triggered-banner" id="triggeredBanner">
+          <div class="triggered-banner-header">
+            <h3>&#9888; Alerts Triggered</h3>
+            <span class="triggered-count" id="triggeredCount">0</span>
+          </div>
+          <div class="triggered-list">
+            <table class="alerts-table">
+              <thead>
+                <tr>
+                  <th>Ticker</th>
+                  <th class="right">Price</th>
+                  <th>Direction</th>
+                  <th class="right">Threshold</th>
+                  <th class="right">Day Move</th>
+                </tr>
+              </thead>
+              <tbody id="triggeredBody"></tbody>
+            </table>
+          </div>
+        </div>
 
-</div><!-- /container -->
+        <div class="panel">
+          <div class="panel-header"><h2>Configured Alerts</h2></div>
+
+          <table class="alerts-table" id="alertsTable" style="display:none">
+            <thead>
+              <tr>
+                <th>Ticker</th>
+                <th>Direction</th>
+                <th class="right">Threshold</th>
+                <th class="right">Last Day Move</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="alertsBody"></tbody>
+          </table>
+          <div class="empty-state" id="alertsEmpty">No alerts configured yet. Add one below.</div>
+
+          <div class="alert-form">
+            <span class="alert-form-label">New alert:</span>
+            <input type="text"   id="alertTicker"    placeholder="Ticker"   maxlength="10" />
+            <input type="number" id="alertThreshold" placeholder="% move"   min="0.01" step="0.01" />
+            <select id="alertDirection">
+              <option value="either">Either direction</option>
+              <option value="up">Up only</option>
+              <option value="down">Down only</option>
+            </select>
+            <button class="btn btn-ghost btn-sm" id="alertAddBtn">+ Add Alert</button>
+          </div>
+
+          <div class="check-row">
+            <span class="check-as-of" id="alertsAsOf"></span>
+            <button class="btn btn-primary" id="checkBtn">Check Alerts Now</button>
+          </div>
+        </div>
+
+        <div class="error-banner" id="alertsError"></div>
+        <div class="loading" id="alertsLoading">
+          <div class="spinner"></div>
+          <span>Checking alerts…</span>
+        </div>
+
+      </div><!-- /tab-alerts -->
+
+    </div><!-- /container -->
+  </div><!-- /main-content -->
+
+</div><!-- /app-body -->
+
 
 <script>
-  // ══════════════════════════════════════════════════
-  // Tab switching
-  // ══════════════════════════════════════════════════
-  document.querySelectorAll('.tab-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-      btn.classList.add('active');
-      document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
-    });
+// ══════════════════════════════════════════════════════════════
+// Tabs
+// ══════════════════════════════════════════════════════════════
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+    if (btn.dataset.tab === 'alerts') loadAlerts();
   });
+});
 
-  // ══════════════════════════════════════════════════
-  // MONITOR TAB
-  // ══════════════════════════════════════════════════
-  let positions = [];
+// ══════════════════════════════════════════════════════════════
+// Logout
+// ══════════════════════════════════════════════════════════════
+document.getElementById('logoutBtn').addEventListener('click', async () => {
+  await fetch('/logout', { method: 'POST' });
+  window.location.href = '/login';
+});
 
-  const fileInput      = document.getElementById('fileInput');
-  const uploadFileName = document.getElementById('uploadFileName');
-  const uploadStatus   = document.getElementById('uploadStatus');
-  const editorBody     = document.getElementById('editorBody');
-  const weightTotal    = document.getElementById('weightTotal');
-  const weightHint     = document.getElementById('weightHint');
-  const analyzeBtn     = document.getElementById('analyzeBtn');
-  const addTicker      = document.getElementById('addTicker');
-  const addWeight      = document.getElementById('addWeight');
-  const addBtn         = document.getElementById('addBtn');
-  const monitorLoading = document.getElementById('monitorLoading');
-  const monitorError   = document.getElementById('monitorError');
-  const monitorResults = document.getElementById('monitorResults');
-  const reanalyzeBtn   = document.getElementById('reanalyzeBtn');
+// ══════════════════════════════════════════════════════════════
+// SIDEBAR / PORTFOLIO MANAGEMENT
+// ══════════════════════════════════════════════════════════════
+let savedPortfolios   = [];   // [{id, name, positions, updated_at}]
+let activePortfolioId = null;
+let activePortfolioName = null;
 
-  // File upload
-  fileInput.addEventListener('change', async () => {
-    const f = fileInput.files[0];
-    if (!f) return;
-    uploadFileName.textContent = f.name;
-    uploadStatus.textContent   = 'Parsing…';
-    uploadStatus.className     = 'upload-status';
+async function fetchPortfolios() {
+  try {
+    const res  = await fetch('/portfolios');
+    savedPortfolios = await res.json();
+    renderSidebar();
+  } catch (e) { /* silent */ }
+}
 
-    const form = new FormData();
-    form.append('file', f);
-    try {
-      const res  = await fetch('/upload', { method: 'POST', body: form });
-      const data = await res.json();
-      if (!res.ok || data.error) {
-        uploadStatus.textContent = data.error || 'Parse error';
-        uploadStatus.className   = 'upload-status err';
-        return;
-      }
-      data.positions.forEach(p => {
-        const idx = positions.findIndex(x => x.ticker === p.ticker);
-        if (idx >= 0) positions[idx].weight = p.weight;
-        else positions.push({ ticker: p.ticker, weight: p.weight });
-      });
-      uploadStatus.textContent = `Loaded ${data.positions.length} position${data.positions.length !== 1 ? 's' : ''}`;
-      uploadStatus.className   = 'upload-status ok';
-      renderEditor();
-    } catch (e) {
-      uploadStatus.textContent = 'Network error';
-      uploadStatus.className   = 'upload-status err';
-    }
-    fileInput.value = '';
+function renderSidebar() {
+  const list  = document.getElementById('sidebarList');
+  const empty = document.getElementById('sidebarEmpty');
+
+  // Remove existing items (keep empty placeholder)
+  list.querySelectorAll('.sidebar-item').forEach(el => el.remove());
+
+  if (!savedPortfolios.length) {
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+
+  savedPortfolios.forEach(p => {
+    const item = document.createElement('div');
+    item.className = 'sidebar-item' + (p.id === activePortfolioId ? ' active' : '');
+    item.dataset.id = p.id;
+    item.innerHTML = `
+      <span class="sidebar-item-name" title="${escHtml(p.name)}">${escHtml(p.name)}</span>
+      <div class="sidebar-item-actions">
+        <button class="sidebar-icon-btn rename-btn" title="Rename">✎</button>
+        <button class="sidebar-icon-btn danger delete-btn" title="Delete">✕</button>
+      </div>
+    `;
+
+    // Click item → load portfolio
+    item.addEventListener('click', e => {
+      if (e.target.closest('.sidebar-item-actions')) return;
+      loadPortfolioIntoEditor(p);
+    });
+
+    // Rename
+    item.querySelector('.rename-btn').addEventListener('click', e => {
+      e.stopPropagation();
+      startRename(item, p);
+    });
+
+    // Delete
+    item.querySelector('.delete-btn').addEventListener('click', e => {
+      e.stopPropagation();
+      deletePortfolio(p.id);
+    });
+
+    list.appendChild(item);
   });
+}
 
-  function renderEditor() {
-    editorBody.innerHTML = '';
-    positions.forEach((pos, i) => {
-      const tr = document.createElement('tr');
-      tr.innerHTML = `
-        <td class="editor-ticker">${escHtml(pos.ticker)}</td>
-        <td>
-          <div class="weight-input-wrap">
-            <input class="weight-input" type="number" min="0" max="100" step="0.01"
-                   value="${pos.weight.toFixed(2)}" data-idx="${i}" />
-            <span class="weight-input-suffix">%</span>
-          </div>
-        </td>
-        <td><button class="btn btn-danger btn-sm delete-btn" data-idx="${i}">✕</button></td>
-      `;
-      editorBody.appendChild(tr);
-    });
+function loadPortfolioIntoEditor(portfolio) {
+  activePortfolioId   = portfolio.id;
+  activePortfolioName = portfolio.name;
+  positions = portfolio.positions.map(p => ({ ticker: p.ticker, weight: p.weight }));
+  document.getElementById('editorTitle').textContent = portfolio.name;
+  renderEditor();
+  renderSidebar();
+  // Clear previous results
+  document.getElementById('monitorResults').style.display = 'none';
+  hideError(document.getElementById('monitorError'));
+}
 
-    editorBody.querySelectorAll('.weight-input').forEach(inp => {
-      inp.addEventListener('input', () => {
-        const val = parseFloat(inp.value);
-        if (!isNaN(val) && val >= 0) positions[parseInt(inp.dataset.idx, 10)].weight = val;
-        updateWeightSummary();
-      });
-    });
+function startRename(item, portfolio) {
+  const nameSpan = item.querySelector('.sidebar-item-name');
+  const input    = document.createElement('input');
+  input.className = 'sidebar-rename-input';
+  input.value     = portfolio.name;
+  nameSpan.replaceWith(input);
+  input.focus();
+  input.select();
 
-    editorBody.querySelectorAll('.delete-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        positions.splice(parseInt(btn.dataset.idx, 10), 1);
-        renderEditor();
-      });
-    });
-
-    updateWeightSummary();
-  }
-
-  function updateWeightSummary() {
-    const total = positions.reduce((s, p) => s + p.weight, 0);
-    weightTotal.textContent = total.toFixed(2) + '%';
-    if (total > 100.05) {
-      weightTotal.className = 'weight-total over';
-      weightHint.textContent = `Over by ${(total - 100).toFixed(2)}%`;
-    } else if (total < 99.95 && total > 0) {
-      weightTotal.className = 'weight-total under';
-      weightHint.textContent = `${(100 - total).toFixed(2)}% unallocated`;
-    } else if (total === 0) {
-      weightTotal.className = 'weight-total neutral';
-      weightHint.textContent = '';
-    } else {
-      weightTotal.className = 'weight-total full';
-      weightHint.textContent = 'Fully allocated';
-    }
-    analyzeBtn.disabled = positions.length === 0;
-  }
-
-  function addPosition() {
-    const ticker = addTicker.value.trim().toUpperCase();
-    const weight = parseFloat(addWeight.value);
-    if (!ticker) { addTicker.focus(); return; }
-    if (isNaN(weight) || weight <= 0) { addWeight.focus(); return; }
-    const idx = positions.findIndex(p => p.ticker === ticker);
-    if (idx >= 0) positions[idx].weight = weight;
-    else positions.push({ ticker, weight });
-    addTicker.value = '';
-    addWeight.value = '';
-    addTicker.focus();
-    renderEditor();
-  }
-
-  addBtn.addEventListener('click', addPosition);
-  addTicker.addEventListener('keydown', e => { if (e.key === 'Enter') addWeight.focus(); });
-  addWeight.addEventListener('keydown', e => { if (e.key === 'Enter') addPosition(); });
-
-  async function runAnalysis() {
-    if (!positions.length) return;
-    hideError(monitorError);
-    monitorLoading.style.display  = 'flex';
-    monitorResults.style.display  = 'none';
-    analyzeBtn.disabled = reanalyzeBtn.disabled = true;
-    try {
-      const res  = await fetch('/analyze', {
-        method: 'POST',
+  const commit = async () => {
+    const newName = input.value.trim();
+    if (newName && newName !== portfolio.name) {
+      await fetch(`/portfolios/${portfolio.id}`, {
+        method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ positions }),
+        body: JSON.stringify({ name: newName }),
       });
-      const data = await res.json();
-      if (!res.ok || data.error) { showError(monitorError, data.error || 'Unknown error'); return; }
-      renderResults(data);
-    } catch (e) {
-      showError(monitorError, 'Network error: ' + e.message);
-    } finally {
-      monitorLoading.style.display = 'none';
-      analyzeBtn.disabled = positions.length === 0;
-      reanalyzeBtn.disabled = false;
-    }
-  }
-
-  analyzeBtn.addEventListener('click', runAnalysis);
-  reanalyzeBtn.addEventListener('click', runAnalysis);
-
-  function renderResults(data) {
-    fmtCard(data.portfolio.day,   'portDay');
-    fmtCard(data.portfolio.week,  'portWeek');
-    fmtCard(data.portfolio.month, 'portMonth');
-    fmtCard(data.portfolio.ytd,   'portYTD');
-    document.getElementById('monitorAsOf').textContent = 'As of ' + data.as_of;
-    document.getElementById('totalWeight').textContent = 'Total weight: ' + data.total_weight.toFixed(2) + '%';
-
-    const maxW  = Math.max(...data.positions.map(p => p.weight || 0));
-    const tbody = document.getElementById('positionsBody');
-    tbody.innerHTML = '';
-
-    data.positions.forEach(pos => {
-      const tr = document.createElement('tr');
-      if (pos.error) {
-        tr.innerHTML = `
-          <td class="ticker-cell"><strong>${escHtml(pos.ticker)}</strong></td>
-          <td class="right">—</td><td>—</td>
-          <td class="right" colspan="4" style="color:#f87171;font-size:0.8rem">${escHtml(pos.error)}</td>
-        `;
-      } else {
-        const bar = maxW > 0 ? (pos.weight / maxW * 100) : 0;
-        tr.innerHTML = `
-          <td class="ticker-cell">
-            <strong>${escHtml(pos.ticker)}</strong>
-            <small>${escHtml(pos.name !== pos.ticker ? pos.name : '')}</small>
-          </td>
-          <td class="right">$${pos.current_price.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}</td>
-          <td>
-            <div class="weight-bar-wrap">
-              <div class="weight-bar"><div class="weight-bar-fill" style="width:${bar}%"></div></div>
-              <span class="weight-pct">${pos.weight.toFixed(2)}%</span>
-            </div>
-          </td>
-          <td class="right">${fmt(pos.day)}</td>
-          <td class="right">${fmt(pos.week)}</td>
-          <td class="right">${fmt(pos.month)}</td>
-          <td class="right">${fmt(pos.ytd)}</td>
-        `;
+      if (activePortfolioId === portfolio.id) {
+        activePortfolioName = newName;
+        document.getElementById('editorTitle').textContent = newName;
       }
-      tbody.appendChild(tr);
-    });
-
-    monitorResults.style.display = 'block';
-    monitorResults.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }
-
-  // ══════════════════════════════════════════════════
-  // ALERTS TAB
-  // ══════════════════════════════════════════════════
-  const alertTicker    = document.getElementById('alertTicker');
-  const alertThreshold = document.getElementById('alertThreshold');
-  const alertDirection = document.getElementById('alertDirection');
-  const alertAddBtn    = document.getElementById('alertAddBtn');
-  const checkBtn       = document.getElementById('checkBtn');
-  const alertsLoading  = document.getElementById('alertsLoading');
-  const alertsError    = document.getElementById('alertsError');
-  const alertsBody     = document.getElementById('alertsBody');
-  const alertsEmpty    = document.getElementById('alertsEmpty');
-  const triggeredBanner= document.getElementById('triggeredBanner');
-  const triggeredCount = document.getElementById('triggeredCount');
-  const triggeredBody  = document.getElementById('triggeredBody');
-  const alertsAsOf     = document.getElementById('alertsAsOf');
-
-  // Tracks last check results keyed by alert id
-  let lastCheckMap = {};
-
-  async function loadAlerts() {
-    try {
-      const res  = await fetch('/alerts');
-      const data = await res.json();
-      renderAlertsTable(data);
-    } catch (e) {
-      showError(alertsError, 'Could not load alerts');
+      await fetchPortfolios();
+    } else {
+      renderSidebar(); // restore
     }
+  };
+
+  input.addEventListener('blur', commit);
+  input.addEventListener('keydown', e => {
+    if (e.key === 'Enter')  { input.blur(); }
+    if (e.key === 'Escape') { input.value = portfolio.name; input.blur(); }
+  });
+}
+
+async function deletePortfolio(id) {
+  if (!confirm('Delete this portfolio?')) return;
+  await fetch(`/portfolios/${id}`, { method: 'DELETE' });
+  if (activePortfolioId === id) {
+    activePortfolioId   = null;
+    activePortfolioName = null;
+    document.getElementById('editorTitle').textContent = 'Portfolio Editor';
+  }
+  await fetchPortfolios();
+}
+
+// New Portfolio button
+document.getElementById('newPortfolioBtn').addEventListener('click', () => {
+  activePortfolioId   = null;
+  activePortfolioName = null;
+  positions           = [];
+  document.getElementById('editorTitle').textContent = 'Portfolio Editor';
+  document.getElementById('monitorResults').style.display = 'none';
+  renderEditor();
+  renderSidebar();
+});
+
+// ── Save popover ──────────────────────────────────────────────
+const savePopover    = document.getElementById('savePopover');
+const saveNameInput  = document.getElementById('saveNameInput');
+const saveError      = document.getElementById('saveError');
+const savePortfolioBtn = document.getElementById('savePortfolioBtn');
+
+savePortfolioBtn.addEventListener('click', () => {
+  saveNameInput.value = activePortfolioName || '';
+  saveError.style.display = 'none';
+  savePopover.classList.toggle('open');
+  if (savePopover.classList.contains('open')) saveNameInput.focus();
+});
+
+document.getElementById('saveCancelBtn').addEventListener('click', () => {
+  savePopover.classList.remove('open');
+});
+
+document.getElementById('saveConfirmBtn').addEventListener('click', savePortfolio);
+saveNameInput.addEventListener('keydown', e => { if (e.key === 'Enter') savePortfolio(); });
+
+// Close popover when clicking outside
+document.addEventListener('click', e => {
+  if (!savePopover.contains(e.target) && e.target !== savePortfolioBtn) {
+    savePopover.classList.remove('open');
+  }
+});
+
+async function savePortfolio() {
+  const name = saveNameInput.value.trim();
+  if (!name) { showSaveError('Please enter a portfolio name.'); return; }
+
+  const body = { name, positions };
+
+  // If active portfolio and name unchanged → update; else create new
+  if (activePortfolioId && name === activePortfolioName) {
+    const res = await fetch(`/portfolios/${activePortfolioId}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    });
+    if (!res.ok) { showSaveError('Could not save.'); return; }
+  } else {
+    const res = await fetch('/portfolios', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    });
+    if (!res.ok) { showSaveError('Could not save.'); return; }
+    const data = await res.json();
+    activePortfolioId   = data.id;
+    activePortfolioName = data.name;
+    document.getElementById('editorTitle').textContent = data.name;
   }
 
-  function renderAlertsTable(alerts, checkMap) {
-    if (checkMap) lastCheckMap = checkMap;
-    alertsBody.innerHTML = '';
+  savePopover.classList.remove('open');
+  await fetchPortfolios();
+}
 
-    if (!alerts.length) {
-      alertsEmpty.style.display = 'block';
+function showSaveError(msg) {
+  saveError.textContent   = msg;
+  saveError.style.display = 'block';
+}
+
+// ══════════════════════════════════════════════════════════════
+// MONITOR TAB — Editor
+// ══════════════════════════════════════════════════════════════
+let positions = [];
+
+// File upload
+document.getElementById('fileInput').addEventListener('change', async function() {
+  const f = this.files[0];
+  if (!f) return;
+  document.getElementById('uploadFileName').textContent = f.name;
+  document.getElementById('uploadStatus').textContent   = 'Parsing…';
+  document.getElementById('uploadStatus').className     = 'upload-status';
+
+  const form = new FormData();
+  form.append('file', f);
+  try {
+    const res  = await fetch('/upload', { method: 'POST', body: form });
+    const data = await res.json();
+    if (!res.ok || data.error) {
+      document.getElementById('uploadStatus').textContent = data.error || 'Parse error';
+      document.getElementById('uploadStatus').className   = 'upload-status err';
       return;
     }
-    alertsEmpty.style.display = 'none';
-
-    alerts.forEach(alert => {
-      const checked     = lastCheckMap[alert.id];
-      const dayReturn   = checked?.day_return ?? null;
-      const isTriggered = checked?.triggered  ?? false;
-
-      const tr = document.createElement('tr');
-      if (isTriggered) tr.classList.add('triggered-row');
-
-      tr.innerHTML = `
-        <td class="ticker-cell"><strong>${escHtml(alert.ticker)}</strong></td>
-        <td><span class="direction-badge ${alert.direction}">${dirLabel(alert.direction)}</span></td>
-        <td class="right">&ge; ${alert.threshold.toFixed(2)}%</td>
-        <td class="right">${dayReturn !== null && dayReturn !== undefined ? fmt(dayReturn) : '<span class="pill neutral">—</span>'}</td>
-        <td><button class="btn btn-danger btn-sm del-alert-btn" data-id="${escHtml(alert.id)}">✕</button></td>
-      `;
-      alertsBody.appendChild(tr);
+    data.positions.forEach(p => {
+      const idx = positions.findIndex(x => x.ticker === p.ticker);
+      if (idx >= 0) positions[idx].weight = p.weight;
+      else positions.push({ ticker: p.ticker, weight: p.weight });
     });
-
-    alertsBody.querySelectorAll('.del-alert-btn').forEach(btn => {
-      btn.addEventListener('click', () => deleteAlert(btn.dataset.id));
-    });
+    document.getElementById('uploadStatus').textContent = `Loaded ${data.positions.length} position${data.positions.length !== 1 ? 's' : ''}`;
+    document.getElementById('uploadStatus').className   = 'upload-status ok';
+    renderEditor();
+  } catch (e) {
+    document.getElementById('uploadStatus').textContent = 'Network error';
+    document.getElementById('uploadStatus').className   = 'upload-status err';
   }
+  this.value = '';
+});
 
-  async function addAlert() {
-    const ticker    = alertTicker.value.trim().toUpperCase();
-    const threshold = parseFloat(alertThreshold.value);
-    const direction = alertDirection.value;
-    if (!ticker)             { alertTicker.focus(); return; }
-    if (isNaN(threshold) || threshold <= 0) { alertThreshold.focus(); return; }
+function renderEditor() {
+  const tbody = document.getElementById('editorBody');
+  tbody.innerHTML = '';
 
-    try {
-      const res = await fetch('/alerts', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ticker, threshold, direction }),
-      });
-      const data = await res.json();
-      if (!res.ok || data.error) { showError(alertsError, data.error || 'Error adding alert'); return; }
-      alertTicker.value    = '';
-      alertThreshold.value = '';
-      hideError(alertsError);
-      loadAlerts();
-    } catch (e) {
-      showError(alertsError, 'Network error: ' + e.message);
-    }
-  }
+  positions.forEach((pos, i) => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td class="editor-ticker">${escHtml(pos.ticker)}</td>
+      <td>
+        <div class="weight-input-wrap">
+          <input class="weight-input" type="number" min="0" max="100" step="0.01"
+                 value="${pos.weight.toFixed(2)}" data-idx="${i}" />
+          <span class="weight-suffix">%</span>
+        </div>
+      </td>
+      <td><button class="btn btn-danger btn-sm delete-pos-btn" data-idx="${i}">✕</button></td>
+    `;
+    tbody.appendChild(tr);
+  });
 
-  async function deleteAlert(id) {
-    try {
-      await fetch('/alerts/' + id, { method: 'DELETE' });
-      delete lastCheckMap[id];
-      loadAlerts();
-    } catch (e) {
-      showError(alertsError, 'Error deleting alert');
-    }
-  }
-
-  async function checkAlerts() {
-    hideError(alertsError);
-    alertsLoading.style.display = 'flex';
-    checkBtn.disabled = true;
-    try {
-      const res  = await fetch('/alerts/check');
-      const data = await res.json();
-      if (!res.ok || data.error) { showError(alertsError, data.error || 'Check failed'); return; }
-
-      alertsAsOf.textContent = 'Last checked: ' + data.as_of;
-
-      // Build per-id check map
-      const checkMap = {};
-      data.checked.forEach(item => {
-        checkMap[item.id] = { ...item, triggered: false };
-      });
-      data.triggered.forEach(item => {
-        if (checkMap[item.id]) checkMap[item.id].triggered = true;
-      });
-
-      lastCheckMap = checkMap;
-
-      // Re-render table with check results
-      const allAlerts = data.checked.map(({ id, ticker, threshold, direction }) =>
-        ({ id, ticker, threshold, direction })
-      );
-      renderAlertsTable(allAlerts, checkMap);
-
-      // Triggered banner
-      if (data.triggered.length > 0) {
-        triggeredCount.textContent = data.triggered.length;
-        triggeredBody.innerHTML    = '';
-        data.triggered.forEach(item => {
-          const tr = document.createElement('tr');
-          tr.innerHTML = `
-            <td class="ticker-cell"><strong>${escHtml(item.ticker)}</strong></td>
-            <td class="right">${item.current_price != null ? '$' + item.current_price.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}) : '—'}</td>
-            <td><span class="direction-badge ${item.direction}">${dirLabel(item.direction)}</span></td>
-            <td class="right">&ge; ${item.threshold.toFixed(2)}%</td>
-            <td class="right">${fmt(item.day_return)}</td>
-          `;
-          triggeredBody.appendChild(tr);
-        });
-        triggeredBanner.style.display = 'block';
-      } else {
-        triggeredBanner.style.display = 'none';
-      }
-
-    } catch (e) {
-      showError(alertsError, 'Network error: ' + e.message);
-    } finally {
-      alertsLoading.style.display = 'none';
-      checkBtn.disabled = false;
-    }
-  }
-
-  alertAddBtn.addEventListener('click', addAlert);
-  alertTicker.addEventListener('keydown', e => { if (e.key === 'Enter') alertThreshold.focus(); });
-  alertThreshold.addEventListener('keydown', e => { if (e.key === 'Enter') addAlert(); });
-  checkBtn.addEventListener('click', checkAlerts);
-
-  // Load alerts when switching to the tab
-  document.querySelectorAll('.tab-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      if (btn.dataset.tab === 'alerts') loadAlerts();
+  tbody.querySelectorAll('.weight-input').forEach(inp => {
+    inp.addEventListener('input', () => {
+      const val = parseFloat(inp.value);
+      if (!isNaN(val) && val >= 0) positions[parseInt(inp.dataset.idx, 10)].weight = val;
+      updateWeightSummary();
     });
   });
 
-  // ══════════════════════════════════════════════════
-  // Shared helpers
-  // ══════════════════════════════════════════════════
-  function fmt(val) {
-    if (val === null || val === undefined) return '<span class="pill neutral">N/A</span>';
-    const cls  = val > 0 ? 'positive' : val < 0 ? 'negative' : 'neutral';
-    const sign = val > 0 ? '+' : '';
-    return `<span class="pill ${cls}">${sign}${val.toFixed(2)}%</span>`;
+  tbody.querySelectorAll('.delete-pos-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      positions.splice(parseInt(btn.dataset.idx, 10), 1);
+      renderEditor();
+    });
+  });
+
+  updateWeightSummary();
+}
+
+function updateWeightSummary() {
+  const total = positions.reduce((s, p) => s + p.weight, 0);
+  const tw    = document.getElementById('weightTotal');
+  tw.textContent = total.toFixed(2) + '%';
+
+  if (total > 100.05) {
+    tw.className = 'weight-total over';
+    document.getElementById('weightHint').textContent = `Over by ${(total - 100).toFixed(2)}%`;
+  } else if (total < 99.95 && total > 0) {
+    tw.className = 'weight-total under';
+    document.getElementById('weightHint').textContent = `${(100 - total).toFixed(2)}% unallocated`;
+  } else if (total === 0) {
+    tw.className = 'weight-total neutral';
+    document.getElementById('weightHint').textContent = '';
+  } else {
+    tw.className = 'weight-total full';
+    document.getElementById('weightHint').textContent = 'Fully allocated';
   }
 
-  function fmtCard(val, elId) {
-    const el = document.getElementById(elId);
-    if (val === null || val === undefined) { el.textContent = '—'; el.className = 'value neutral'; return; }
-    const sign = val > 0 ? '+' : '';
-    el.textContent = `${sign}${val.toFixed(2)}%`;
-    el.className   = 'value ' + (val > 0 ? 'positive' : val < 0 ? 'negative' : 'neutral');
-  }
+  const hasPositions = positions.length > 0;
+  document.getElementById('analyzeBtn').disabled      = !hasPositions;
+  document.getElementById('savePortfolioBtn').disabled = !hasPositions;
+}
 
-  function dirLabel(d) {
-    return d === 'up' ? '▲ Up' : d === 'down' ? '▼ Down' : '▲▼ Either';
-  }
-
-  function showError(el, msg) { el.textContent = msg; el.style.display = 'block'; }
-  function hideError(el)      { el.style.display = 'none'; }
-
-  function escHtml(s) {
-    return String(s)
-      .replace(/&/g, '&amp;').replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-  }
-
-  // Init
+function addPosition() {
+  const ticker = document.getElementById('addTicker').value.trim().toUpperCase();
+  const weight = parseFloat(document.getElementById('addWeight').value);
+  if (!ticker) { document.getElementById('addTicker').focus(); return; }
+  if (isNaN(weight) || weight <= 0) { document.getElementById('addWeight').focus(); return; }
+  const idx = positions.findIndex(p => p.ticker === ticker);
+  if (idx >= 0) positions[idx].weight = weight;
+  else positions.push({ ticker, weight });
+  document.getElementById('addTicker').value = '';
+  document.getElementById('addWeight').value = '';
+  document.getElementById('addTicker').focus();
   renderEditor();
+}
+
+document.getElementById('addBtn').addEventListener('click', addPosition);
+document.getElementById('addTicker').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('addWeight').focus(); });
+document.getElementById('addWeight').addEventListener('keydown', e => { if (e.key === 'Enter') addPosition(); });
+
+// Analyze
+async function runAnalysis() {
+  if (!positions.length) return;
+  const monitorError   = document.getElementById('monitorError');
+  const monitorLoading = document.getElementById('monitorLoading');
+  const monitorResults = document.getElementById('monitorResults');
+
+  hideError(monitorError);
+  monitorLoading.style.display  = 'flex';
+  monitorResults.style.display  = 'none';
+  document.getElementById('analyzeBtn').disabled   = true;
+  document.getElementById('reanalyzeBtn').disabled = true;
+
+  try {
+    const res  = await fetch('/analyze', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ positions }),
+    });
+    const data = await res.json();
+    if (!res.ok || data.error) { showError(monitorError, data.error || 'Unknown error'); return; }
+    renderResults(data);
+  } catch (e) {
+    showError(monitorError, 'Network error: ' + e.message);
+  } finally {
+    monitorLoading.style.display = 'none';
+    document.getElementById('analyzeBtn').disabled   = positions.length === 0;
+    document.getElementById('reanalyzeBtn').disabled = false;
+  }
+}
+
+document.getElementById('analyzeBtn').addEventListener('click', runAnalysis);
+document.getElementById('reanalyzeBtn').addEventListener('click', runAnalysis);
+
+function renderResults(data) {
+  fmtCard(data.portfolio.day,   'portDay');
+  fmtCard(data.portfolio.week,  'portWeek');
+  fmtCard(data.portfolio.month, 'portMonth');
+  fmtCard(data.portfolio.ytd,   'portYTD');
+  document.getElementById('monitorAsOf').textContent  = 'As of ' + data.as_of;
+  document.getElementById('totalWeight').textContent  = 'Total weight: ' + data.total_weight.toFixed(2) + '%';
+
+  const maxW  = Math.max(...data.positions.map(p => p.weight || 0));
+  const tbody = document.getElementById('positionsBody');
+  tbody.innerHTML = '';
+
+  data.positions.forEach(pos => {
+    const tr = document.createElement('tr');
+    if (pos.error) {
+      tr.innerHTML = `
+        <td class="ticker-cell"><strong>${escHtml(pos.ticker)}</strong></td>
+        <td class="right">—</td><td>—</td>
+        <td class="right" colspan="4" style="color:#f87171;font-size:0.78rem">${escHtml(pos.error)}</td>
+      `;
+    } else {
+      const bar = maxW > 0 ? (pos.weight / maxW * 100) : 0;
+      tr.innerHTML = `
+        <td class="ticker-cell">
+          <strong>${escHtml(pos.ticker)}</strong>
+          <small>${escHtml(pos.name !== pos.ticker ? pos.name : '')}</small>
+        </td>
+        <td class="right">$${pos.current_price.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}</td>
+        <td>
+          <div class="weight-bar-wrap">
+            <div class="weight-bar"><div class="weight-bar-fill" style="width:${bar}%"></div></div>
+            <span class="weight-pct">${pos.weight.toFixed(2)}%</span>
+          </div>
+        </td>
+        <td class="right">${fmt(pos.day)}</td>
+        <td class="right">${fmt(pos.week)}</td>
+        <td class="right">${fmt(pos.month)}</td>
+        <td class="right">${fmt(pos.ytd)}</td>
+      `;
+    }
+    tbody.appendChild(tr);
+  });
+
+  document.getElementById('monitorResults').style.display = 'block';
+  document.getElementById('monitorResults').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// ══════════════════════════════════════════════════════════════
+// ALERTS TAB
+// ══════════════════════════════════════════════════════════════
+let lastCheckMap = {};
+
+async function loadAlerts() {
+  try {
+    const res    = await fetch('/alerts');
+    const alerts = await res.json();
+    renderAlertsTable(alerts);
+  } catch (e) {
+    showError(document.getElementById('alertsError'), 'Could not load alerts');
+  }
+}
+
+function renderAlertsTable(alerts, checkMap) {
+  if (checkMap) lastCheckMap = checkMap;
+  const tbody = document.getElementById('alertsBody');
+  const table = document.getElementById('alertsTable');
+  const empty = document.getElementById('alertsEmpty');
+  tbody.innerHTML = '';
+
+  if (!alerts.length) {
+    table.style.display = 'none';
+    empty.style.display = 'block';
+    return;
+  }
+  table.style.display = '';
+  empty.style.display = 'none';
+
+  alerts.forEach(alert => {
+    const checked     = lastCheckMap[alert.id];
+    const dayReturn   = checked?.day_return ?? null;
+    const isTriggered = checked?.triggered  ?? false;
+    const tr          = document.createElement('tr');
+    if (isTriggered) tr.classList.add('triggered-row');
+    tr.innerHTML = `
+      <td class="ticker-cell"><strong>${escHtml(alert.ticker)}</strong></td>
+      <td><span class="direction-badge ${alert.direction}">${dirLabel(alert.direction)}</span></td>
+      <td class="right">&ge; ${alert.threshold.toFixed(2)}%</td>
+      <td class="right">${dayReturn !== null && dayReturn !== undefined ? fmt(dayReturn) : '<span class="pill neutral">—</span>'}</td>
+      <td><button class="btn btn-danger btn-sm del-alert-btn" data-id="${escHtml(alert.id)}">✕</button></td>
+    `;
+    tbody.appendChild(tr);
+  });
+
+  tbody.querySelectorAll('.del-alert-btn').forEach(btn => {
+    btn.addEventListener('click', () => deleteAlertRow(btn.dataset.id));
+  });
+}
+
+async function addAlertRow() {
+  const ticker    = document.getElementById('alertTicker').value.trim().toUpperCase();
+  const threshold = parseFloat(document.getElementById('alertThreshold').value);
+  const direction = document.getElementById('alertDirection').value;
+  const errEl     = document.getElementById('alertsError');
+
+  if (!ticker)             { document.getElementById('alertTicker').focus(); return; }
+  if (isNaN(threshold) || threshold <= 0) { document.getElementById('alertThreshold').focus(); return; }
+
+  try {
+    const res  = await fetch('/alerts', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ticker, threshold, direction }),
+    });
+    const data = await res.json();
+    if (!res.ok || data.error) { showError(errEl, data.error || 'Error adding alert'); return; }
+    document.getElementById('alertTicker').value    = '';
+    document.getElementById('alertThreshold').value = '';
+    hideError(errEl);
+    loadAlerts();
+  } catch (e) {
+    showError(errEl, 'Network error: ' + e.message);
+  }
+}
+
+async function deleteAlertRow(id) {
+  await fetch('/alerts/' + id, { method: 'DELETE' });
+  delete lastCheckMap[id];
+  loadAlerts();
+}
+
+async function checkAlerts() {
+  const errEl = document.getElementById('alertsError');
+  hideError(errEl);
+  document.getElementById('alertsLoading').style.display = 'flex';
+  document.getElementById('checkBtn').disabled = true;
+
+  try {
+    const res  = await fetch('/alerts/check');
+    const data = await res.json();
+    if (!res.ok || data.error) { showError(errEl, data.error || 'Check failed'); return; }
+
+    document.getElementById('alertsAsOf').textContent = 'Last checked: ' + data.as_of;
+
+    const checkMap = {};
+    data.checked.forEach(item => { checkMap[item.id] = { ...item, triggered: false }; });
+    data.triggered.forEach(item => { if (checkMap[item.id]) checkMap[item.id].triggered = true; });
+
+    const allAlerts = data.checked.map(({ id, ticker, threshold, direction }) =>
+      ({ id, ticker, threshold, direction })
+    );
+    renderAlertsTable(allAlerts, checkMap);
+
+    const tBanner = document.getElementById('triggeredBanner');
+    if (data.triggered.length > 0) {
+      document.getElementById('triggeredCount').textContent = data.triggered.length;
+      const tBody = document.getElementById('triggeredBody');
+      tBody.innerHTML = '';
+      data.triggered.forEach(item => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td class="ticker-cell"><strong>${escHtml(item.ticker)}</strong></td>
+          <td class="right">${item.current_price != null ? '$' + item.current_price.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}) : '—'}</td>
+          <td><span class="direction-badge ${item.direction}">${dirLabel(item.direction)}</span></td>
+          <td class="right">&ge; ${item.threshold.toFixed(2)}%</td>
+          <td class="right">${fmt(item.day_return)}</td>
+        `;
+        tBody.appendChild(tr);
+      });
+      tBanner.style.display = 'block';
+    } else {
+      tBanner.style.display = 'none';
+    }
+  } catch (e) {
+    showError(errEl, 'Network error: ' + e.message);
+  } finally {
+    document.getElementById('alertsLoading').style.display = 'none';
+    document.getElementById('checkBtn').disabled = false;
+  }
+}
+
+document.getElementById('alertAddBtn').addEventListener('click', addAlertRow);
+document.getElementById('alertTicker').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('alertThreshold').focus(); });
+document.getElementById('alertThreshold').addEventListener('keydown', e => { if (e.key === 'Enter') addAlertRow(); });
+document.getElementById('checkBtn').addEventListener('click', checkAlerts);
+
+// ══════════════════════════════════════════════════════════════
+// Shared helpers
+// ══════════════════════════════════════════════════════════════
+function fmt(val) {
+  if (val === null || val === undefined) return '<span class="pill neutral">N/A</span>';
+  const cls  = val > 0 ? 'positive' : val < 0 ? 'negative' : 'neutral';
+  const sign = val > 0 ? '+' : '';
+  return `<span class="pill ${cls}">${sign}${val.toFixed(2)}%</span>`;
+}
+
+function fmtCard(val, elId) {
+  const el = document.getElementById(elId);
+  if (val === null || val === undefined) { el.textContent = '—'; el.className = 'value neutral'; return; }
+  el.textContent = (val > 0 ? '+' : '') + val.toFixed(2) + '%';
+  el.className   = 'value ' + (val > 0 ? 'positive' : val < 0 ? 'negative' : 'neutral');
+}
+
+function dirLabel(d) {
+  return d === 'up' ? '▲ Up' : d === 'down' ? '▼ Down' : '▲▼ Either';
+}
+
+function showError(el, msg) { el.textContent = msg; el.style.display = 'block'; }
+function hideError(el)      { el.style.display = 'none'; }
+
+function escHtml(s) {
+  return String(s)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+// ══════════════════════════════════════════════════════════════
+// Init
+// ══════════════════════════════════════════════════════════════
+renderEditor();
+fetchPortfolios();
 </script>
 
 </body>
