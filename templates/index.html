@@ -199,8 +199,32 @@
     .panel-header {
       display: flex; align-items: center; gap: 10px;
       padding: 14px 18px; border-bottom: 1px solid #2d3148;
+      cursor: pointer; user-select: none;
     }
     .panel-header h2 { font-size: 0.95rem; font-weight: 600; flex: 1; }
+
+    .collapse-toggle {
+      background: none; border: none; color: #64748b;
+      font-size: 0.75rem; padding: 3px 6px; border-radius: 4px;
+      cursor: pointer; transition: color 0.15s, background 0.15s;
+      line-height: 1; flex-shrink: 0;
+    }
+    .collapse-toggle:hover { color: #e2e8f0; background: #2d3148; }
+
+    .panel-body {
+      transition: max-height 0.25s ease, opacity 0.2s ease;
+      max-height: 2000px;
+      opacity: 1;
+      overflow: hidden;
+    }
+    .panel-body.collapsed {
+      max-height: 0;
+      opacity: 0;
+    }
+    /* hide the header bottom border when collapsed */
+    .panel-header.collapsed-header {
+      border-bottom-color: transparent;
+    }
 
     /* ── Upload strip ─────────────────────────────────── */
     .upload-strip {
@@ -516,10 +540,12 @@
       <div class="tab-panel active" id="tab-monitor">
 
         <div class="panel">
-          <div class="panel-header">
+          <div class="panel-header" id="editorPanelHeader">
             <h2 id="editorTitle">Portfolio Editor</h2>
+            <button class="collapse-toggle" id="editorCollapseBtn" title="Collapse">▲</button>
           </div>
 
+          <div class="panel-body" id="editorPanelBody">
           <div class="upload-strip">
             <label class="upload-file-label" for="fileInput">&#8593; Import Excel</label>
             <input type="file" id="fileInput" accept=".xlsx,.xls" />
@@ -562,6 +588,7 @@
             <button class="btn btn-ghost" id="savePortfolioBtn" disabled>Save Portfolio</button>
             <button class="btn btn-primary" id="analyzeBtn" disabled>Analyze</button>
           </div>
+          </div><!-- /panel-body -->
         </div>
 
         <div class="error-banner" id="monitorError"></div>
@@ -775,9 +802,9 @@ function loadPortfolioIntoEditor(portfolio) {
   document.getElementById('editorTitle').textContent = portfolio.name;
   renderEditor();
   renderSidebar();
-  // Clear previous results
   document.getElementById('monitorResults').style.display = 'none';
   hideError(document.getElementById('monitorError'));
+  setEditorCollapsed(false);
 }
 
 function startRename(item, portfolio) {
@@ -834,6 +861,7 @@ document.getElementById('newPortfolioBtn').addEventListener('click', () => {
   document.getElementById('monitorResults').style.display = 'none';
   renderEditor();
   renderSidebar();
+  setEditorCollapsed(false);
 });
 
 // ── Save popover ──────────────────────────────────────────────
@@ -1094,6 +1122,7 @@ function renderResults(data) {
   });
 
   document.getElementById('monitorResults').style.display = 'block';
+  setEditorCollapsed(true);
   document.getElementById('monitorResults').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
@@ -1263,6 +1292,24 @@ function escHtml(s) {
     .replace(/&/g, '&amp;').replace(/</g, '&lt;')
     .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
+
+// ══════════════════════════════════════════════════════════════
+// Editor collapse / expand
+// ══════════════════════════════════════════════════════════════
+const editorPanelBody   = document.getElementById('editorPanelBody');
+const editorPanelHeader = document.getElementById('editorPanelHeader');
+const editorCollapseBtn = document.getElementById('editorCollapseBtn');
+
+function setEditorCollapsed(collapsed) {
+  editorPanelBody.classList.toggle('collapsed', collapsed);
+  editorPanelHeader.classList.toggle('collapsed-header', collapsed);
+  editorCollapseBtn.textContent = collapsed ? '▼' : '▲';
+  editorCollapseBtn.title       = collapsed ? 'Expand' : 'Collapse';
+}
+
+editorPanelHeader.addEventListener('click', () => {
+  setEditorCollapsed(!editorPanelBody.classList.contains('collapsed'));
+});
 
 // ══════════════════════════════════════════════════════════════
 // Init
