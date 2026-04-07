@@ -211,20 +211,9 @@
     }
     .collapse-toggle:hover { color: #e2e8f0; background: #2d3148; }
 
-    .panel-body {
-      transition: max-height 0.25s ease, opacity 0.2s ease;
-      max-height: 2000px;
-      opacity: 1;
-      overflow: hidden;
-    }
-    .panel-body.collapsed {
-      max-height: 0;
-      opacity: 0;
-    }
-    /* hide the header bottom border when collapsed */
-    .panel-header.collapsed-header {
-      border-bottom-color: transparent;
-    }
+    .panel-body.collapsed { display: none; }
+
+    .panel-header.collapsed-header { border-bottom-color: transparent; }
 
     /* ── Upload strip ─────────────────────────────────── */
     .upload-strip {
@@ -712,6 +701,24 @@
 
 
 <script>
+// ══════════════════════════════════════════════════════════════
+// Editor collapse / expand  (defined first so all callers can use it)
+// ══════════════════════════════════════════════════════════════
+const editorPanelBody   = document.getElementById('editorPanelBody');
+const editorPanelHeader = document.getElementById('editorPanelHeader');
+const editorCollapseBtn = document.getElementById('editorCollapseBtn');
+
+function setEditorCollapsed(collapsed) {
+  editorPanelBody.classList.toggle('collapsed', collapsed);
+  editorPanelHeader.classList.toggle('collapsed-header', collapsed);
+  editorCollapseBtn.textContent = collapsed ? '▼' : '▲';
+  editorCollapseBtn.title       = collapsed ? 'Expand' : 'Collapse';
+}
+
+editorPanelHeader.addEventListener('click', () => {
+  setEditorCollapsed(!editorPanelBody.classList.contains('collapsed'));
+});
+
 // ══════════════════════════════════════════════════════════════
 // Tabs
 // ══════════════════════════════════════════════════════════════
@@ -1292,24 +1299,6 @@ function escHtml(s) {
     .replace(/&/g, '&amp;').replace(/</g, '&lt;')
     .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
-
-// ══════════════════════════════════════════════════════════════
-// Editor collapse / expand
-// ══════════════════════════════════════════════════════════════
-const editorPanelBody   = document.getElementById('editorPanelBody');
-const editorPanelHeader = document.getElementById('editorPanelHeader');
-const editorCollapseBtn = document.getElementById('editorCollapseBtn');
-
-function setEditorCollapsed(collapsed) {
-  editorPanelBody.classList.toggle('collapsed', collapsed);
-  editorPanelHeader.classList.toggle('collapsed-header', collapsed);
-  editorCollapseBtn.textContent = collapsed ? '▼' : '▲';
-  editorCollapseBtn.title       = collapsed ? 'Expand' : 'Collapse';
-}
-
-editorPanelHeader.addEventListener('click', () => {
-  setEditorCollapsed(!editorPanelBody.classList.contains('collapsed'));
-});
 
 // ══════════════════════════════════════════════════════════════
 // Init
