@@ -385,9 +385,18 @@
       text-align: left; padding: 9px 18px;
       font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em;
       color: #64748b; background: #151720; border-bottom: 1px solid #2d3148;
-      white-space: nowrap;
+      white-space: nowrap; cursor: pointer; user-select: none;
+      transition: color 0.15s;
     }
+    table.results-table thead th:hover { color: #94a3b8; }
+    table.results-table thead th.sort-active { color: #e2e8f0; }
     table.results-table thead th.right { text-align: right; }
+
+    .sort-icon {
+      display: inline-block; margin-left: 4px;
+      font-size: 0.65rem; opacity: 0.4; vertical-align: middle;
+    }
+    th.sort-active .sort-icon { opacity: 1; color: #6366f1; }
     table.results-table tbody tr { border-bottom: 1px solid #1e2235; transition: background 0.1s; }
     table.results-table tbody tr:last-child { border-bottom: none; }
     table.results-table tbody tr:hover { background: #1e2235; }
@@ -607,16 +616,16 @@
               <h2>Positions</h2>
               <span class="total-weight-badge" id="totalWeight"></span>
             </div>
-            <table class="results-table">
+            <table class="results-table" id="resultsTable">
               <thead>
-                <tr>
-                  <th>Ticker</th>
-                  <th class="right">Price</th>
-                  <th>Weight</th>
-                  <th class="right">Day</th>
-                  <th class="right">Week</th>
-                  <th class="right">Month</th>
-                  <th class="right">YTD</th>
+                <tr id="resultsTableHead">
+                  <th data-col="ticker">Ticker<span class="sort-icon">⇅</span></th>
+                  <th data-col="current_price" class="right">Price<span class="sort-icon">⇅</span></th>
+                  <th data-col="weight">Weight<span class="sort-icon">⇅</span></th>
+                  <th data-col="day"   class="right">Day<span class="sort-icon">⇅</span></th>
+                  <th data-col="week"  class="right">Week<span class="sort-icon">⇅</span></th>
+                  <th data-col="month" class="right">Month<span class="sort-icon">⇅</span></th>
+                  <th data-col="ytd"   class="right">YTD<span class="sort-icon">⇅</span></th>
                 </tr>
               </thead>
               <tbody id="positionsBody"></tbody>
@@ -1085,19 +1094,64 @@ async function runAnalysis() {
 document.getElementById('analyzeBtn').addEventListener('click', runAnalysis);
 document.getElementById('reanalyzeBtn').addEventListener('click', runAnalysis);
 
+// Sort state for results table
+let resultsData     = [];   // full positions array from last analysis
+let sortCol         = null; // null | 'ticker' | 'current_price' | 'weight' | 'day' | 'week' | 'month' | 'ytd'
+let sortDir         = null; // null | 'asc' | 'desc'
+
 function renderResults(data) {
   fmtCard(data.portfolio.day,   'portDay');
   fmtCard(data.portfolio.week,  'portWeek');
   fmtCard(data.portfolio.month, 'portMonth');
   fmtCard(data.portfolio.ytd,   'portYTD');
-  document.getElementById('monitorAsOf').textContent  = 'As of ' + data.as_of;
-  document.getElementById('totalWeight').textContent  = 'Total weight: ' + data.total_weight.toFixed(2) + '%';
+  document.getElementById('monitorAsOf').textContent = 'As of ' + data.as_of;
+  document.getElementById('totalWeight').textContent = 'Total weight: ' + data.total_weight.toFixed(2) + '%';
 
-  const maxW  = Math.max(...data.positions.map(p => p.weight || 0));
-  const tbody = document.getElementById('positionsBody');
+  // Store original order and reset sort
+  resultsData = data.positions;
+  sortCol = null;
+  sortDir = null;
+  updateSortHeaders();
+  renderPositionRows();
+
+  document.getElementById('monitorResults').style.display = 'block';
+  setEditorCollapsed(true);
+  document.getElementById('monitorResults').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function sortedPositions() {
+  if (!sortCol || !sortDir) return resultsData;
+
+  return [...resultsData].sort((a, b) => {
+    // Rows with errors always go to the bottom
+    if (a.error && b.error) return 0;
+    if (a.error) return 1;
+    if (b.error) return -1;
+
+    let aVal = a[sortCol];
+    let bVal = b[sortCol];
+
+    // Nulls to bottom
+    if (aVal === null || aVal === undefined) return 1;
+    if (bVal === null || bVal === undefined) return -1;
+
+    // String comparison for ticker
+    if (typeof aVal === 'string') {
+      const cmp = aVal.localeCompare(bVal);
+      return sortDir === 'asc' ? cmp : -cmp;
+    }
+
+    return sortDir === 'asc' ? aVal - bVal : bVal - aVal;
+  });
+}
+
+function renderPositionRows() {
+  const positions = sortedPositions();
+  const maxW      = Math.max(...resultsData.filter(p => !p.error).map(p => p.weight || 0));
+  const tbody     = document.getElementById('positionsBody');
   tbody.innerHTML = '';
 
-  data.positions.forEach(pos => {
+  positions.forEach(pos => {
     const tr = document.createElement('tr');
     if (pos.error) {
       tr.innerHTML = `
@@ -1127,11 +1181,43 @@ function renderResults(data) {
     }
     tbody.appendChild(tr);
   });
-
-  document.getElementById('monitorResults').style.display = 'block';
-  setEditorCollapsed(true);
-  document.getElementById('monitorResults').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
+
+function updateSortHeaders() {
+  document.querySelectorAll('#resultsTableHead th').forEach(th => {
+    const col  = th.dataset.col;
+    const icon = th.querySelector('.sort-icon');
+    th.classList.toggle('sort-active', col === sortCol);
+    if (col !== sortCol) {
+      icon.textContent = '⇅';
+    } else {
+      icon.textContent = sortDir === 'asc' ? '▲' : '▼';
+    }
+  });
+}
+
+// Wire up header clicks (runs once after DOM is ready)
+document.getElementById('resultsTableHead').addEventListener('click', e => {
+  const th = e.target.closest('th[data-col]');
+  if (!th || !resultsData.length) return;
+
+  const col = th.dataset.col;
+
+  if (sortCol !== col) {
+    // New column: start descending
+    sortCol = col;
+    sortDir = 'desc';
+  } else if (sortDir === 'desc') {
+    sortDir = 'asc';
+  } else {
+    // Was asc → clear sort
+    sortCol = null;
+    sortDir = null;
+  }
+
+  updateSortHeaders();
+  renderPositionRows();
+});
 
 // ══════════════════════════════════════════════════════════════
 // ALERTS TAB
