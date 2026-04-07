@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portfolio Monitor</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #0f1117;
+      color: #e2e8f0;
+      min-height: 100vh;
+    }
+
+    header {
+      background: #1a1d27;
+      border-bottom: 1px solid #2d3148;
+      padding: 18px 40px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    header h1 { font-size: 1.3rem; font-weight: 600; letter-spacing: -0.02em; }
+    header .dot { width: 8px; height: 8px; border-radius: 50%; background: #4ade80; display: inline-block; }
+
+    .container { max-width: 1300px; margin: 0 auto; padding: 36px 24px; }
+
+    /* ── Buttons ───────────────────────────────────────────── */
+    .btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 9px 18px; border-radius: 8px; border: none;
+      cursor: pointer; font-size: 0.875rem; font-weight: 500;
+      transition: opacity 0.15s; white-space: nowrap;
+    }
+    .btn:hover { opacity: 0.85; }
+    .btn:disabled { opacity: 0.35; cursor: not-allowed; }
+    .btn-primary  { background: #6366f1; color: #fff; }
+    .btn-ghost    { background: #2d3148; color: #94a3b8; }
+    .btn-danger   { background: transparent; color: #f87171; border: 1px solid #3b1f1f; }
+    .btn-danger:hover { background: #3b1212; opacity: 1; }
+    .btn-sm { padding: 5px 10px; font-size: 0.78rem; border-radius: 6px; }
+
+    /* ── Editor panel ──────────────────────────────────────── */
+    .editor-panel {
+      background: #1a1d27;
+      border: 1px solid #2d3148;
+      border-radius: 12px;
+      margin-bottom: 28px;
+      overflow: hidden;
+    }
+
+    .editor-panel-header {
+      display: flex; align-items: center; gap: 12px;
+      padding: 16px 20px;
+      border-bottom: 1px solid #2d3148;
+    }
+    .editor-panel-header h2 { font-size: 1rem; font-weight: 600; flex: 1; }
+
+    /* Upload strip */
+    .upload-strip {
+      display: flex; align-items: center; gap: 10px;
+      padding: 14px 20px;
+      border-bottom: 1px solid #2d3148;
+      background: #151720;
+    }
+    .upload-strip input[type="file"] { display: none; }
+    .upload-file-label {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 7px 14px; border-radius: 7px;
+      background: #2d3148; color: #94a3b8;
+      font-size: 0.85rem; font-weight: 500;
+      cursor: pointer; transition: opacity 0.15s;
+      border: 1px solid #3a3f5c;
+    }
+    .upload-file-label:hover { opacity: 0.8; }
+    .upload-file-name { font-size: 0.82rem; color: #64748b; flex: 1; }
+    .upload-status { font-size: 0.78rem; }
+    .upload-status.ok  { color: #4ade80; }
+    .upload-status.err { color: #f87171; }
+
+    /* Editor table */
+    .editor-table-wrap { overflow-x: auto; }
+
+    table.editor-table {
+      width: 100%; border-collapse: collapse; font-size: 0.88rem;
+    }
+    table.editor-table thead th {
+      text-align: left; padding: 10px 16px;
+      font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em;
+      color: #64748b; background: #151720;
+      border-bottom: 1px solid #2d3148;
+    }
+    table.editor-table tbody tr { border-bottom: 1px solid #1e2235; }
+    table.editor-table tbody tr:last-child { border-bottom: none; }
+    table.editor-table tbody tr:hover { background: #1e2235; }
+    table.editor-table td { padding: 8px 16px; vertical-align: middle; }
+
+    .editor-ticker {
+      font-weight: 600; font-size: 0.9rem; letter-spacing: 0.02em;
+    }
+
+    .weight-input-wrap {
+      display: flex; align-items: center; gap: 6px;
+    }
+    .weight-input {
+      width: 80px; background: #0f1117; border: 1px solid #2d3148;
+      border-radius: 6px; color: #e2e8f0; font-size: 0.88rem;
+      padding: 5px 8px; text-align: right;
+      transition: border-color 0.15s;
+    }
+    .weight-input:focus { outline: none; border-color: #6366f1; }
+    .weight-input-suffix { color: #64748b; font-size: 0.82rem; }
+
+    /* Add-row form */
+    .add-row {
+      display: flex; align-items: center; gap: 10px;
+      padding: 12px 16px;
+      border-top: 1px solid #2d3148;
+      background: #151720;
+    }
+    .add-row input[type="text"], .add-row input[type="number"] {
+      background: #1a1d27; border: 1px solid #2d3148;
+      border-radius: 6px; color: #e2e8f0; font-size: 0.88rem;
+      padding: 7px 10px;
+      transition: border-color 0.15s;
+    }
+    .add-row input:focus { outline: none; border-color: #6366f1; }
+    .add-row input[type="text"]   { width: 110px; text-transform: uppercase; }
+    .add-row input[type="number"] { width: 90px; }
+    .add-row-label { font-size: 0.8rem; color: #64748b; }
+
+    /* Weight summary bar */
+    .weight-summary {
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px 20px;
+      border-top: 1px solid #2d3148;
+      font-size: 0.82rem;
+    }
+    .weight-summary .label { color: #64748b; }
+    .weight-total { font-weight: 600; }
+    .weight-total.over   { color: #f87171; }
+    .weight-total.under  { color: #fbbf24; }
+    .weight-total.full   { color: #4ade80; }
+    .weight-hint { color: #64748b; font-size: 0.76rem; flex: 1; }
+
+    .analyze-row {
+      display: flex; justify-content: flex-end; align-items: center;
+      gap: 12px; padding: 14px 20px;
+      border-top: 1px solid #2d3148;
+    }
+
+    /* ── Loading ───────────────────────────────────────────── */
+    .loading {
+      display: none; flex-direction: column; align-items: center;
+      gap: 14px; padding: 48px; color: #94a3b8;
+    }
+    .spinner {
+      width: 32px; height: 32px;
+      border: 3px solid #2d3148; border-top-color: #6366f1;
+      border-radius: 50%; animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Error banner ──────────────────────────────────────── */
+    .error-banner {
+      display: none; background: #3b1212; border: 1px solid #7f1d1d;
+      color: #fca5a5; padding: 12px 16px; border-radius: 8px;
+      margin-bottom: 20px; font-size: 0.88rem;
+    }
+
+    /* ── Results ───────────────────────────────────────────── */
+    .results-section { display: none; }
+
+    .results-header {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 16px;
+    }
+    .results-header h2 { font-size: 1.05rem; font-weight: 600; }
+    .as-of { font-size: 0.76rem; color: #64748b; }
+
+    .cards {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 14px; margin-bottom: 28px;
+    }
+    .card {
+      background: #1a1d27; border: 1px solid #2d3148;
+      border-radius: 10px; padding: 18px 22px;
+    }
+    .card .label {
+      font-size: 0.72rem; text-transform: uppercase;
+      letter-spacing: 0.08em; color: #64748b; margin-bottom: 8px;
+    }
+    .card .value { font-size: 1.75rem; font-weight: 700; letter-spacing: -0.03em; }
+
+    .positive { color: #4ade80; }
+    .negative { color: #f87171; }
+    .neutral  { color: #94a3b8; }
+
+    /* Results table */
+    .table-wrapper {
+      background: #1a1d27; border: 1px solid #2d3148;
+      border-radius: 10px; overflow: hidden;
+    }
+    .table-header-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 14px 20px; border-bottom: 1px solid #2d3148;
+    }
+    .table-header-row h2 { font-size: 0.95rem; font-weight: 600; }
+    .total-weight-badge {
+      font-size: 0.76rem; background: #1e2035; border: 1px solid #2d3148;
+      border-radius: 20px; padding: 3px 10px; color: #94a3b8;
+    }
+
+    table.results-table {
+      width: 100%; border-collapse: collapse; font-size: 0.88rem;
+    }
+    table.results-table thead th {
+      text-align: left; padding: 10px 20px;
+      font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em;
+      color: #64748b; background: #151720; border-bottom: 1px solid #2d3148;
+      white-space: nowrap;
+    }
+    table.results-table thead th.right { text-align: right; }
+    table.results-table tbody tr { border-bottom: 1px solid #1e2235; transition: background 0.1s; }
+    table.results-table tbody tr:last-child { border-bottom: none; }
+    table.results-table tbody tr:hover { background: #1e2235; }
+    table.results-table tbody td { padding: 13px 20px; vertical-align: middle; }
+    table.results-table tbody td.right { text-align: right; font-variant-numeric: tabular-nums; }
+
+    .ticker-cell strong { font-weight: 600; display: block; }
+    .ticker-cell small  { color: #64748b; font-size: 0.76rem; }
+
+    /* weight bar in results */
+    .weight-bar-wrap { display: flex; align-items: center; gap: 8px; }
+    .weight-bar { flex: 1; height: 4px; background: #2d3148; border-radius: 2px; overflow: hidden; }
+    .weight-bar-fill { height: 100%; background: #6366f1; border-radius: 2px; }
+    .weight-pct { font-size: 0.78rem; color: #94a3b8; width: 42px; text-align: right; flex-shrink: 0; }
+
+    .pill {
+      display: inline-block; padding: 3px 8px; border-radius: 4px;
+      font-size: 0.8rem; font-weight: 500;
+    }
+    .pill.positive { background: rgba(74,222,128,0.1);  color: #4ade80; }
+    .pill.negative { background: rgba(248,113,113,0.1); color: #f87171; }
+    .pill.neutral  { background: rgba(148,163,184,0.1); color: #94a3b8; }
+
+    .error-cell { color: #f87171; font-size: 0.8rem; }
+
+    @media (max-width: 768px) {
+      .cards { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <span class="dot"></span>
+  <h1>Portfolio Monitor</h1>
+</header>
+
+<div class="container">
+
+  <!-- ── Portfolio Editor ─────────────────────────────────── -->
+  <div class="editor-panel">
+    <div class="editor-panel-header">
+      <h2>Portfolio Editor</h2>
+    </div>
+
+    <!-- Upload strip -->
+    <div class="upload-strip">
+      <label class="upload-file-label" for="fileInput">
+        &#8593; Import Excel
+      </label>
+      <input type="file" id="fileInput" accept=".xlsx,.xls" />
+      <span class="upload-file-name" id="uploadFileName">No file selected</span>
+      <span class="upload-status" id="uploadStatus"></span>
+    </div>
+
+    <!-- Editable positions table -->
+    <div class="editor-table-wrap">
+      <table class="editor-table">
+        <thead>
+          <tr>
+            <th>Ticker</th>
+            <th>Weight</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="editorBody">
+          <!-- rows injected by JS -->
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Add-position row -->
+    <div class="add-row">
+      <span class="add-row-label">Add position:</span>
+      <input type="text"   id="addTicker"  placeholder="e.g. AAPL" maxlength="10" />
+      <input type="number" id="addWeight"  placeholder="Weight %" min="0" max="100" step="0.01" />
+      <button class="btn btn-ghost btn-sm" id="addBtn">+ Add</button>
+    </div>
+
+    <!-- Weight summary -->
+    <div class="weight-summary">
+      <span class="label">Total weight:</span>
+      <span class="weight-total" id="weightTotal">0.00%</span>
+      <span class="weight-hint" id="weightHint"></span>
+    </div>
+
+    <div class="analyze-row">
+      <button class="btn btn-primary" id="analyzeBtn" disabled>Analyze Portfolio</button>
+    </div>
+  </div>
+
+  <div class="error-banner" id="errorBanner"></div>
+  <div class="loading" id="loading">
+    <div class="spinner"></div>
+    <span>Fetching market data…</span>
+  </div>
+
+  <!-- ── Results ──────────────────────────────────────────── -->
+  <div class="results-section" id="results">
+
+    <div class="results-header">
+      <h2>Portfolio Performance</h2>
+      <div style="display:flex;align-items:center;gap:12px">
+        <span class="as-of" id="asOf"></span>
+        <button class="btn btn-ghost btn-sm" id="reanalyzeBtn">Re-analyze</button>
+      </div>
+    </div>
+
+    <div class="cards">
+      <div class="card"><div class="label">Day</div><div class="value" id="portDay">—</div></div>
+      <div class="card"><div class="label">Week</div><div class="value" id="portWeek">—</div></div>
+      <div class="card"><div class="label">Month</div><div class="value" id="portMonth">—</div></div>
+      <div class="card"><div class="label">Year to Date</div><div class="value" id="portYTD">—</div></div>
+    </div>
+
+    <div class="table-wrapper">
+      <div class="table-header-row">
+        <h2>Positions</h2>
+        <span class="total-weight-badge" id="totalWeight"></span>
+      </div>
+      <table class="results-table">
+        <thead>
+          <tr>
+            <th>Ticker</th>
+            <th class="right">Price</th>
+            <th>Weight</th>
+            <th class="right">Day</th>
+            <th class="right">Week</th>
+            <th class="right">Month</th>
+            <th class="right">YTD</th>
+          </tr>
+        </thead>
+        <tbody id="positionsBody"></tbody>
+      </table>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+  // ── State ────────────────────────────────────────────────
+  // positions: [{ticker: string, weight: number (percent)}]
+  let positions = [];
+
+  // ── DOM refs ─────────────────────────────────────────────
+  const fileInput      = document.getElementById('fileInput');
+  const uploadFileName = document.getElementById('uploadFileName');
+  const uploadStatus   = document.getElementById('uploadStatus');
+  const editorBody     = document.getElementById('editorBody');
+  const weightTotal    = document.getElementById('weightTotal');
+  const weightHint     = document.getElementById('weightHint');
+  const analyzeBtn     = document.getElementById('analyzeBtn');
+  const addTicker      = document.getElementById('addTicker');
+  const addWeight      = document.getElementById('addWeight');
+  const addBtn         = document.getElementById('addBtn');
+  const loading        = document.getElementById('loading');
+  const errorBanner    = document.getElementById('errorBanner');
+  const results        = document.getElementById('results');
+  const reanalyzeBtn   = document.getElementById('reanalyzeBtn');
+
+  // ── File upload ──────────────────────────────────────────
+  fileInput.addEventListener('change', async () => {
+    const f = fileInput.files[0];
+    if (!f) return;
+    uploadFileName.textContent = f.name;
+    uploadStatus.textContent = 'Parsing…';
+    uploadStatus.className = 'upload-status';
+
+    const form = new FormData();
+    form.append('file', f);
+
+    try {
+      const res  = await fetch('/upload', { method: 'POST', body: form });
+      const data = await res.json();
+      if (!res.ok || data.error) {
+        uploadStatus.textContent = data.error || 'Parse error';
+        uploadStatus.className = 'upload-status err';
+        return;
+      }
+      // Merge: keep existing manual positions, replace any matching tickers
+      const incoming = data.positions; // [{ticker, weight}]
+      incoming.forEach(p => {
+        const idx = positions.findIndex(x => x.ticker === p.ticker);
+        if (idx >= 0) positions[idx].weight = p.weight;
+        else positions.push({ ticker: p.ticker, weight: p.weight });
+      });
+      uploadStatus.textContent = `Loaded ${incoming.length} position${incoming.length !== 1 ? 's' : ''}`;
+      uploadStatus.className = 'upload-status ok';
+      renderEditor();
+    } catch (e) {
+      uploadStatus.textContent = 'Network error';
+      uploadStatus.className = 'upload-status err';
+    }
+
+    // Reset so the same file can be re-uploaded
+    fileInput.value = '';
+  });
+
+  // ── Editor rendering ─────────────────────────────────────
+  function renderEditor() {
+    editorBody.innerHTML = '';
+
+    positions.forEach((pos, i) => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td class="editor-ticker">${escHtml(pos.ticker)}</td>
+        <td>
+          <div class="weight-input-wrap">
+            <input class="weight-input" type="number" min="0" max="100" step="0.01"
+                   value="${pos.weight.toFixed(2)}" data-idx="${i}" />
+            <span class="weight-input-suffix">%</span>
+          </div>
+        </td>
+        <td>
+          <button class="btn btn-danger btn-sm delete-btn" data-idx="${i}">✕</button>
+        </td>
+      `;
+      editorBody.appendChild(tr);
+    });
+
+    // Weight inputs → live update
+    editorBody.querySelectorAll('.weight-input').forEach(inp => {
+      inp.addEventListener('input', () => {
+        const idx = parseInt(inp.dataset.idx, 10);
+        const val = parseFloat(inp.value);
+        if (!isNaN(val) && val >= 0) positions[idx].weight = val;
+        updateWeightSummary();
+      });
+    });
+
+    // Delete buttons
+    editorBody.querySelectorAll('.delete-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const idx = parseInt(btn.dataset.idx, 10);
+        positions.splice(idx, 1);
+        renderEditor();
+      });
+    });
+
+    updateWeightSummary();
+  }
+
+  function updateWeightSummary() {
+    const total = positions.reduce((s, p) => s + p.weight, 0);
+    const disp  = total.toFixed(2) + '%';
+    weightTotal.textContent = disp;
+
+    if (total > 100.05) {
+      weightTotal.className = 'weight-total over';
+      weightHint.textContent = `Over by ${(total - 100).toFixed(2)}%`;
+    } else if (total < 99.95 && total > 0) {
+      weightTotal.className = 'weight-total under';
+      weightHint.textContent = `${(100 - total).toFixed(2)}% unallocated`;
+    } else if (total === 0) {
+      weightTotal.className = 'weight-total neutral';
+      weightHint.textContent = '';
+    } else {
+      weightTotal.className = 'weight-total full';
+      weightHint.textContent = 'Fully allocated';
+    }
+
+    analyzeBtn.disabled = positions.length === 0;
+  }
+
+  // ── Add position ─────────────────────────────────────────
+  function addPosition() {
+    const ticker = addTicker.value.trim().toUpperCase();
+    const weight = parseFloat(addWeight.value);
+
+    if (!ticker) { addTicker.focus(); return; }
+    if (isNaN(weight) || weight <= 0) { addWeight.focus(); return; }
+
+    const existing = positions.findIndex(p => p.ticker === ticker);
+    if (existing >= 0) {
+      positions[existing].weight = weight;
+    } else {
+      positions.push({ ticker, weight });
+    }
+
+    addTicker.value = '';
+    addWeight.value = '';
+    addTicker.focus();
+    renderEditor();
+  }
+
+  addBtn.addEventListener('click', addPosition);
+  addTicker.addEventListener('keydown', e => { if (e.key === 'Enter') addWeight.focus(); });
+  addWeight.addEventListener('keydown', e => { if (e.key === 'Enter') addPosition(); });
+
+  // ── Analyze ──────────────────────────────────────────────
+  async function runAnalysis() {
+    if (positions.length === 0) return;
+
+    hideError();
+    loading.style.display = 'flex';
+    results.style.display = 'none';
+    analyzeBtn.disabled   = true;
+    reanalyzeBtn.disabled = true;
+
+    try {
+      const res  = await fetch('/analyze', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ positions }),
+      });
+      const data = await res.json();
+
+      if (!res.ok || data.error) { showError(data.error || 'Unknown error'); return; }
+      renderResults(data);
+    } catch (e) {
+      showError('Network error: ' + e.message);
+    } finally {
+      loading.style.display = 'none';
+      analyzeBtn.disabled   = positions.length === 0;
+      reanalyzeBtn.disabled = false;
+    }
+  }
+
+  analyzeBtn.addEventListener('click', runAnalysis);
+  reanalyzeBtn.addEventListener('click', runAnalysis);
+
+  // ── Results rendering ─────────────────────────────────────
+  function fmt(val) {
+    if (val === null || val === undefined) return '<span class="pill neutral">N/A</span>';
+    const cls  = val > 0 ? 'positive' : val < 0 ? 'negative' : 'neutral';
+    const sign = val > 0 ? '+' : '';
+    return `<span class="pill ${cls}">${sign}${val.toFixed(2)}%</span>`;
+  }
+
+  function fmtCard(val, elId) {
+    const el = document.getElementById(elId);
+    if (val === null || val === undefined) { el.textContent = '—'; el.className = 'value neutral'; return; }
+    const sign = val > 0 ? '+' : '';
+    el.textContent = `${sign}${val.toFixed(2)}%`;
+    el.className   = 'value ' + (val > 0 ? 'positive' : val < 0 ? 'negative' : 'neutral');
+  }
+
+  function renderResults(data) {
+    fmtCard(data.portfolio.day,   'portDay');
+    fmtCard(data.portfolio.week,  'portWeek');
+    fmtCard(data.portfolio.month, 'portMonth');
+    fmtCard(data.portfolio.ytd,   'portYTD');
+
+    document.getElementById('asOf').textContent = 'As of ' + data.as_of;
+    document.getElementById('totalWeight').textContent =
+      'Total weight: ' + data.total_weight.toFixed(2) + '%';
+
+    const maxWeight = Math.max(...data.positions.map(p => p.weight || 0));
+    const tbody     = document.getElementById('positionsBody');
+    tbody.innerHTML = '';
+
+    data.positions.forEach(pos => {
+      const tr = document.createElement('tr');
+      if (pos.error) {
+        tr.innerHTML = `
+          <td class="ticker-cell"><strong>${escHtml(pos.ticker)}</strong></td>
+          <td class="right">—</td>
+          <td>—</td>
+          <td class="right error-cell" colspan="4">${escHtml(pos.error)}</td>
+        `;
+      } else {
+        const barPct = maxWeight > 0 ? (pos.weight / maxWeight * 100) : 0;
+        tr.innerHTML = `
+          <td class="ticker-cell">
+            <strong>${escHtml(pos.ticker)}</strong>
+            <small>${escHtml(pos.name !== pos.ticker ? pos.name : '')}</small>
+          </td>
+          <td class="right">$${pos.current_price.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}</td>
+          <td>
+            <div class="weight-bar-wrap">
+              <div class="weight-bar"><div class="weight-bar-fill" style="width:${barPct}%"></div></div>
+              <span class="weight-pct">${pos.weight.toFixed(2)}%</span>
+            </div>
+          </td>
+          <td class="right">${fmt(pos.day)}</td>
+          <td class="right">${fmt(pos.week)}</td>
+          <td class="right">${fmt(pos.month)}</td>
+          <td class="right">${fmt(pos.ytd)}</td>
+        `;
+      }
+      tbody.appendChild(tr);
+    });
+
+    results.style.display = 'block';
+    results.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  // ── Helpers ───────────────────────────────────────────────
+  function showError(msg) { errorBanner.textContent = msg; errorBanner.style.display = 'block'; }
+  function hideError()    { errorBanner.style.display = 'none'; }
+
+  function escHtml(s) {
+    return String(s)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+
+  // Init
+  renderEditor();
+</script>
+
+</body>
+</html>
