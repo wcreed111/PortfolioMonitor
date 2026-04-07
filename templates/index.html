@@ -14,20 +14,44 @@
       min-height: 100vh;
     }
 
+    /* ── Header ───────────────────────────────────────── */
     header {
       background: #1a1d27;
       border-bottom: 1px solid #2d3148;
-      padding: 18px 40px;
+      padding: 0 40px;
       display: flex;
-      align-items: center;
-      gap: 12px;
+      align-items: stretch;
+      gap: 0;
     }
-    header h1 { font-size: 1.3rem; font-weight: 600; letter-spacing: -0.02em; }
-    header .dot { width: 8px; height: 8px; border-radius: 50%; background: #4ade80; display: inline-block; }
+    .header-brand {
+      display: flex; align-items: center; gap: 10px;
+      padding: 16px 0; margin-right: 32px;
+    }
+    .dot { width: 8px; height: 8px; border-radius: 50%; background: #4ade80; }
+    header h1 { font-size: 1.2rem; font-weight: 600; letter-spacing: -0.02em; white-space: nowrap; }
 
+    /* ── Tabs ─────────────────────────────────────────── */
+    .tabs {
+      display: flex; align-items: stretch; gap: 0;
+    }
+    .tab-btn {
+      background: none; border: none; color: #64748b;
+      font-size: 0.88rem; font-weight: 500;
+      padding: 0 20px; cursor: pointer;
+      border-bottom: 2px solid transparent;
+      transition: color 0.15s, border-color 0.15s;
+      white-space: nowrap;
+    }
+    .tab-btn:hover { color: #e2e8f0; }
+    .tab-btn.active { color: #e2e8f0; border-bottom-color: #6366f1; }
+
+    /* ── Layout ───────────────────────────────────────── */
     .container { max-width: 1300px; margin: 0 auto; padding: 36px 24px; }
 
-    /* ── Buttons ───────────────────────────────────────────── */
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* ── Buttons ──────────────────────────────────────── */
     .btn {
       display: inline-flex; align-items: center; gap: 6px;
       padding: 9px 18px; border-radius: 8px; border: none;
@@ -36,33 +60,27 @@
     }
     .btn:hover { opacity: 0.85; }
     .btn:disabled { opacity: 0.35; cursor: not-allowed; }
-    .btn-primary  { background: #6366f1; color: #fff; }
-    .btn-ghost    { background: #2d3148; color: #94a3b8; }
-    .btn-danger   { background: transparent; color: #f87171; border: 1px solid #3b1f1f; }
+    .btn-primary { background: #6366f1; color: #fff; }
+    .btn-ghost   { background: #2d3148; color: #94a3b8; }
+    .btn-danger  { background: transparent; color: #f87171; border: 1px solid #3b1f1f; }
     .btn-danger:hover { background: #3b1212; opacity: 1; }
     .btn-sm { padding: 5px 10px; font-size: 0.78rem; border-radius: 6px; }
 
-    /* ── Editor panel ──────────────────────────────────────── */
-    .editor-panel {
-      background: #1a1d27;
-      border: 1px solid #2d3148;
-      border-radius: 12px;
-      margin-bottom: 28px;
-      overflow: hidden;
+    /* ── Shared panel style ───────────────────────────── */
+    .panel {
+      background: #1a1d27; border: 1px solid #2d3148;
+      border-radius: 12px; margin-bottom: 28px; overflow: hidden;
     }
-
-    .editor-panel-header {
+    .panel-header {
       display: flex; align-items: center; gap: 12px;
-      padding: 16px 20px;
-      border-bottom: 1px solid #2d3148;
+      padding: 16px 20px; border-bottom: 1px solid #2d3148;
     }
-    .editor-panel-header h2 { font-size: 1rem; font-weight: 600; flex: 1; }
+    .panel-header h2 { font-size: 1rem; font-weight: 600; flex: 1; }
 
-    /* Upload strip */
+    /* ── Upload strip ─────────────────────────────────── */
     .upload-strip {
       display: flex; align-items: center; gap: 10px;
-      padding: 14px 20px;
-      border-bottom: 1px solid #2d3148;
+      padding: 14px 20px; border-bottom: 1px solid #2d3148;
       background: #151720;
     }
     .upload-strip input[type="file"] { display: none; }
@@ -80,7 +98,7 @@
     .upload-status.ok  { color: #4ade80; }
     .upload-status.err { color: #f87171; }
 
-    /* Editor table */
+    /* ── Editor table ─────────────────────────────────── */
     .editor-table-wrap { overflow-x: auto; }
 
     table.editor-table {
@@ -89,69 +107,59 @@
     table.editor-table thead th {
       text-align: left; padding: 10px 16px;
       font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em;
-      color: #64748b; background: #151720;
-      border-bottom: 1px solid #2d3148;
+      color: #64748b; background: #151720; border-bottom: 1px solid #2d3148;
     }
     table.editor-table tbody tr { border-bottom: 1px solid #1e2235; }
     table.editor-table tbody tr:last-child { border-bottom: none; }
     table.editor-table tbody tr:hover { background: #1e2235; }
     table.editor-table td { padding: 8px 16px; vertical-align: middle; }
+    .editor-ticker { font-weight: 600; font-size: 0.9rem; }
 
-    .editor-ticker {
-      font-weight: 600; font-size: 0.9rem; letter-spacing: 0.02em;
-    }
-
-    .weight-input-wrap {
-      display: flex; align-items: center; gap: 6px;
-    }
+    .weight-input-wrap { display: flex; align-items: center; gap: 6px; }
     .weight-input {
       width: 80px; background: #0f1117; border: 1px solid #2d3148;
       border-radius: 6px; color: #e2e8f0; font-size: 0.88rem;
-      padding: 5px 8px; text-align: right;
-      transition: border-color 0.15s;
+      padding: 5px 8px; text-align: right; transition: border-color 0.15s;
     }
     .weight-input:focus { outline: none; border-color: #6366f1; }
     .weight-input-suffix { color: #64748b; font-size: 0.82rem; }
 
-    /* Add-row form */
+    /* ── Add row ──────────────────────────────────────── */
     .add-row {
       display: flex; align-items: center; gap: 10px;
-      padding: 12px 16px;
-      border-top: 1px solid #2d3148;
+      padding: 12px 16px; border-top: 1px solid #2d3148;
       background: #151720;
     }
-    .add-row input[type="text"], .add-row input[type="number"] {
+    .add-row input[type="text"],
+    .add-row input[type="number"] {
       background: #1a1d27; border: 1px solid #2d3148;
       border-radius: 6px; color: #e2e8f0; font-size: 0.88rem;
-      padding: 7px 10px;
-      transition: border-color 0.15s;
+      padding: 7px 10px; transition: border-color 0.15s;
     }
     .add-row input:focus { outline: none; border-color: #6366f1; }
     .add-row input[type="text"]   { width: 110px; text-transform: uppercase; }
     .add-row input[type="number"] { width: 90px; }
     .add-row-label { font-size: 0.8rem; color: #64748b; }
 
-    /* Weight summary bar */
+    /* ── Weight summary ───────────────────────────────── */
     .weight-summary {
       display: flex; align-items: center; gap: 12px;
-      padding: 12px 20px;
-      border-top: 1px solid #2d3148;
+      padding: 12px 20px; border-top: 1px solid #2d3148;
       font-size: 0.82rem;
     }
     .weight-summary .label { color: #64748b; }
-    .weight-total { font-weight: 600; }
-    .weight-total.over   { color: #f87171; }
-    .weight-total.under  { color: #fbbf24; }
-    .weight-total.full   { color: #4ade80; }
-    .weight-hint { color: #64748b; font-size: 0.76rem; flex: 1; }
+    .weight-total          { font-weight: 600; }
+    .weight-total.over     { color: #f87171; }
+    .weight-total.under    { color: #fbbf24; }
+    .weight-total.full     { color: #4ade80; }
+    .weight-hint           { color: #64748b; font-size: 0.76rem; flex: 1; }
 
     .analyze-row {
       display: flex; justify-content: flex-end; align-items: center;
-      gap: 12px; padding: 14px 20px;
-      border-top: 1px solid #2d3148;
+      gap: 12px; padding: 14px 20px; border-top: 1px solid #2d3148;
     }
 
-    /* ── Loading ───────────────────────────────────────────── */
+    /* ── Loading ──────────────────────────────────────── */
     .loading {
       display: none; flex-direction: column; align-items: center;
       gap: 14px; padding: 48px; color: #94a3b8;
@@ -163,16 +171,15 @@
     }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* ── Error banner ──────────────────────────────────────── */
+    /* ── Error banner ─────────────────────────────────── */
     .error-banner {
       display: none; background: #3b1212; border: 1px solid #7f1d1d;
       color: #fca5a5; padding: 12px 16px; border-radius: 8px;
       margin-bottom: 20px; font-size: 0.88rem;
     }
 
-    /* ── Results ───────────────────────────────────────────── */
+    /* ── Results ──────────────────────────────────────── */
     .results-section { display: none; }
-
     .results-header {
       display: flex; justify-content: space-between; align-items: center;
       margin-bottom: 16px;
@@ -198,7 +205,6 @@
     .negative { color: #f87171; }
     .neutral  { color: #94a3b8; }
 
-    /* Results table */
     .table-wrapper {
       background: #1a1d27; border: 1px solid #2d3148;
       border-radius: 10px; overflow: hidden;
@@ -232,11 +238,10 @@
     .ticker-cell strong { font-weight: 600; display: block; }
     .ticker-cell small  { color: #64748b; font-size: 0.76rem; }
 
-    /* weight bar in results */
     .weight-bar-wrap { display: flex; align-items: center; gap: 8px; }
-    .weight-bar { flex: 1; height: 4px; background: #2d3148; border-radius: 2px; overflow: hidden; }
+    .weight-bar      { flex: 1; height: 4px; background: #2d3148; border-radius: 2px; overflow: hidden; }
     .weight-bar-fill { height: 100%; background: #6366f1; border-radius: 2px; }
-    .weight-pct { font-size: 0.78rem; color: #94a3b8; width: 42px; text-align: right; flex-shrink: 0; }
+    .weight-pct      { font-size: 0.78rem; color: #94a3b8; width: 42px; text-align: right; flex-shrink: 0; }
 
     .pill {
       display: inline-block; padding: 3px 8px; border-radius: 4px;
@@ -246,129 +251,294 @@
     .pill.negative { background: rgba(248,113,113,0.1); color: #f87171; }
     .pill.neutral  { background: rgba(148,163,184,0.1); color: #94a3b8; }
 
-    .error-cell { color: #f87171; font-size: 0.8rem; }
+    /* ── Alerts tab ───────────────────────────────────── */
+
+    /* Triggered banner */
+    .triggered-banner {
+      display: none;
+      border-radius: 10px; overflow: hidden;
+      margin-bottom: 24px;
+    }
+    .triggered-banner-header {
+      display: flex; align-items: center; gap: 10px;
+      padding: 14px 20px; background: #3b1212; border: 1px solid #7f1d1d;
+      border-bottom: none; border-radius: 10px 10px 0 0;
+    }
+    .triggered-banner-header h3 { font-size: 0.95rem; font-weight: 600; color: #fca5a5; flex: 1; }
+    .triggered-count {
+      background: #f87171; color: #0f1117;
+      border-radius: 20px; padding: 2px 9px;
+      font-size: 0.75rem; font-weight: 700;
+    }
+    .triggered-list {
+      border: 1px solid #7f1d1d; border-top: none;
+      border-radius: 0 0 10px 10px; overflow: hidden;
+    }
+
+    table.alerts-table {
+      width: 100%; border-collapse: collapse; font-size: 0.88rem;
+    }
+    table.alerts-table thead th {
+      text-align: left; padding: 10px 20px;
+      font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em;
+      color: #64748b; background: #151720; border-bottom: 1px solid #2d3148;
+      white-space: nowrap;
+    }
+    table.alerts-table thead th.right { text-align: right; }
+    table.alerts-table tbody tr { border-bottom: 1px solid #1e2235; transition: background 0.1s; }
+    table.alerts-table tbody tr:last-child { border-bottom: none; }
+    table.alerts-table tbody tr:hover { background: #1e2235; }
+    table.alerts-table tbody td { padding: 12px 20px; vertical-align: middle; }
+    table.alerts-table tbody td.right { text-align: right; font-variant-numeric: tabular-nums; }
+
+    /* triggered row highlight */
+    table.alerts-table tbody tr.triggered-row { background: rgba(248,113,113,0.06); }
+    table.alerts-table tbody tr.triggered-row:hover { background: rgba(248,113,113,0.1); }
+
+    /* Add alert form */
+    .alert-form {
+      display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+      padding: 14px 20px; border-top: 1px solid #2d3148; background: #151720;
+    }
+    .alert-form input[type="text"],
+    .alert-form input[type="number"],
+    .alert-form select {
+      background: #1a1d27; border: 1px solid #2d3148;
+      border-radius: 6px; color: #e2e8f0; font-size: 0.88rem;
+      padding: 7px 10px; transition: border-color 0.15s;
+    }
+    .alert-form input:focus,
+    .alert-form select:focus { outline: none; border-color: #6366f1; }
+    .alert-form input[type="text"]   { width: 100px; text-transform: uppercase; }
+    .alert-form input[type="number"] { width: 90px; }
+    .alert-form select               { width: 160px; cursor: pointer; }
+    .alert-form-label { font-size: 0.8rem; color: #64748b; }
+
+    .direction-badge {
+      display: inline-block; padding: 2px 8px; border-radius: 4px;
+      font-size: 0.76rem; font-weight: 600;
+    }
+    .direction-badge.up     { background: rgba(74,222,128,0.1);  color: #4ade80; }
+    .direction-badge.down   { background: rgba(248,113,113,0.1); color: #f87171; }
+    .direction-badge.either { background: rgba(99,102,241,0.1);  color: #818cf8; }
+
+    .check-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 14px 20px; border-top: 1px solid #2d3148;
+    }
+    .check-as-of { font-size: 0.76rem; color: #64748b; }
+
+    .empty-state {
+      padding: 48px 20px; text-align: center;
+      color: #64748b; font-size: 0.88rem;
+    }
 
     @media (max-width: 768px) {
       .cards { grid-template-columns: repeat(2, 1fr); }
+      header { padding: 0 16px; }
     }
   </style>
 </head>
 <body>
 
 <header>
-  <span class="dot"></span>
-  <h1>Portfolio Monitor</h1>
+  <div class="header-brand">
+    <span class="dot"></span>
+    <h1>Portfolio Monitor</h1>
+  </div>
+  <nav class="tabs">
+    <button class="tab-btn active" data-tab="monitor">Monitor</button>
+    <button class="tab-btn" data-tab="alerts">Alerts</button>
+  </nav>
 </header>
 
 <div class="container">
 
-  <!-- ── Portfolio Editor ─────────────────────────────────── -->
-  <div class="editor-panel">
-    <div class="editor-panel-header">
-      <h2>Portfolio Editor</h2>
-    </div>
+  <!-- ════════════════════════════════════════════════════
+       MONITOR TAB
+  ════════════════════════════════════════════════════ -->
+  <div class="tab-panel active" id="tab-monitor">
 
-    <!-- Upload strip -->
-    <div class="upload-strip">
-      <label class="upload-file-label" for="fileInput">
-        &#8593; Import Excel
-      </label>
-      <input type="file" id="fileInput" accept=".xlsx,.xls" />
-      <span class="upload-file-name" id="uploadFileName">No file selected</span>
-      <span class="upload-status" id="uploadStatus"></span>
-    </div>
+    <div class="panel">
+      <div class="panel-header"><h2>Portfolio Editor</h2></div>
 
-    <!-- Editable positions table -->
-    <div class="editor-table-wrap">
-      <table class="editor-table">
-        <thead>
-          <tr>
-            <th>Ticker</th>
-            <th>Weight</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody id="editorBody">
-          <!-- rows injected by JS -->
-        </tbody>
-      </table>
-    </div>
+      <div class="upload-strip">
+        <label class="upload-file-label" for="fileInput">&#8593; Import Excel</label>
+        <input type="file" id="fileInput" accept=".xlsx,.xls" />
+        <span class="upload-file-name" id="uploadFileName">No file selected</span>
+        <span class="upload-status" id="uploadStatus"></span>
+      </div>
 
-    <!-- Add-position row -->
-    <div class="add-row">
-      <span class="add-row-label">Add position:</span>
-      <input type="text"   id="addTicker"  placeholder="e.g. AAPL" maxlength="10" />
-      <input type="number" id="addWeight"  placeholder="Weight %" min="0" max="100" step="0.01" />
-      <button class="btn btn-ghost btn-sm" id="addBtn">+ Add</button>
-    </div>
+      <div class="editor-table-wrap">
+        <table class="editor-table">
+          <thead><tr><th>Ticker</th><th>Weight</th><th></th></tr></thead>
+          <tbody id="editorBody"></tbody>
+        </table>
+      </div>
 
-    <!-- Weight summary -->
-    <div class="weight-summary">
-      <span class="label">Total weight:</span>
-      <span class="weight-total" id="weightTotal">0.00%</span>
-      <span class="weight-hint" id="weightHint"></span>
-    </div>
+      <div class="add-row">
+        <span class="add-row-label">Add position:</span>
+        <input type="text"   id="addTicker" placeholder="e.g. AAPL" maxlength="10" />
+        <input type="number" id="addWeight" placeholder="Weight %" min="0" max="100" step="0.01" />
+        <button class="btn btn-ghost btn-sm" id="addBtn">+ Add</button>
+      </div>
 
-    <div class="analyze-row">
-      <button class="btn btn-primary" id="analyzeBtn" disabled>Analyze Portfolio</button>
-    </div>
-  </div>
+      <div class="weight-summary">
+        <span class="label">Total weight:</span>
+        <span class="weight-total" id="weightTotal">0.00%</span>
+        <span class="weight-hint" id="weightHint"></span>
+      </div>
 
-  <div class="error-banner" id="errorBanner"></div>
-  <div class="loading" id="loading">
-    <div class="spinner"></div>
-    <span>Fetching market data…</span>
-  </div>
-
-  <!-- ── Results ──────────────────────────────────────────── -->
-  <div class="results-section" id="results">
-
-    <div class="results-header">
-      <h2>Portfolio Performance</h2>
-      <div style="display:flex;align-items:center;gap:12px">
-        <span class="as-of" id="asOf"></span>
-        <button class="btn btn-ghost btn-sm" id="reanalyzeBtn">Re-analyze</button>
+      <div class="analyze-row">
+        <button class="btn btn-primary" id="analyzeBtn" disabled>Analyze Portfolio</button>
       </div>
     </div>
 
-    <div class="cards">
-      <div class="card"><div class="label">Day</div><div class="value" id="portDay">—</div></div>
-      <div class="card"><div class="label">Week</div><div class="value" id="portWeek">—</div></div>
-      <div class="card"><div class="label">Month</div><div class="value" id="portMonth">—</div></div>
-      <div class="card"><div class="label">Year to Date</div><div class="value" id="portYTD">—</div></div>
+    <div class="error-banner" id="monitorError"></div>
+    <div class="loading" id="monitorLoading">
+      <div class="spinner"></div>
+      <span>Fetching market data…</span>
     </div>
 
-    <div class="table-wrapper">
-      <div class="table-header-row">
-        <h2>Positions</h2>
-        <span class="total-weight-badge" id="totalWeight"></span>
+    <div class="results-section" id="monitorResults">
+      <div class="results-header">
+        <h2>Portfolio Performance</h2>
+        <div style="display:flex;align-items:center;gap:12px">
+          <span class="as-of" id="monitorAsOf"></span>
+          <button class="btn btn-ghost btn-sm" id="reanalyzeBtn">Re-analyze</button>
+        </div>
       </div>
-      <table class="results-table">
-        <thead>
-          <tr>
-            <th>Ticker</th>
-            <th class="right">Price</th>
-            <th>Weight</th>
-            <th class="right">Day</th>
-            <th class="right">Week</th>
-            <th class="right">Month</th>
-            <th class="right">YTD</th>
-          </tr>
-        </thead>
-        <tbody id="positionsBody"></tbody>
-      </table>
+
+      <div class="cards">
+        <div class="card"><div class="label">Day</div><div class="value" id="portDay">—</div></div>
+        <div class="card"><div class="label">Week</div><div class="value" id="portWeek">—</div></div>
+        <div class="card"><div class="label">Month</div><div class="value" id="portMonth">—</div></div>
+        <div class="card"><div class="label">Year to Date</div><div class="value" id="portYTD">—</div></div>
+      </div>
+
+      <div class="table-wrapper">
+        <div class="table-header-row">
+          <h2>Positions</h2>
+          <span class="total-weight-badge" id="totalWeight"></span>
+        </div>
+        <table class="results-table">
+          <thead>
+            <tr>
+              <th>Ticker</th>
+              <th class="right">Price</th>
+              <th>Weight</th>
+              <th class="right">Day</th>
+              <th class="right">Week</th>
+              <th class="right">Month</th>
+              <th class="right">YTD</th>
+            </tr>
+          </thead>
+          <tbody id="positionsBody"></tbody>
+        </table>
+      </div>
     </div>
 
-  </div>
+  </div><!-- /tab-monitor -->
 
-</div>
+
+  <!-- ════════════════════════════════════════════════════
+       ALERTS TAB
+  ════════════════════════════════════════════════════ -->
+  <div class="tab-panel" id="tab-alerts">
+
+    <!-- Triggered banner (shown after check) -->
+    <div class="triggered-banner" id="triggeredBanner">
+      <div class="triggered-banner-header">
+        <h3>&#9888; Alerts Triggered</h3>
+        <span class="triggered-count" id="triggeredCount">0</span>
+      </div>
+      <div class="triggered-list">
+        <table class="alerts-table">
+          <thead>
+            <tr>
+              <th>Ticker</th>
+              <th class="right">Price</th>
+              <th>Direction</th>
+              <th class="right">Threshold</th>
+              <th class="right">Day Move</th>
+            </tr>
+          </thead>
+          <tbody id="triggeredBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- All configured alerts -->
+    <div class="panel">
+      <div class="panel-header">
+        <h2>Configured Alerts</h2>
+      </div>
+
+      <div id="alertsTableWrap">
+        <table class="alerts-table">
+          <thead>
+            <tr>
+              <th>Ticker</th>
+              <th>Direction</th>
+              <th class="right">Threshold</th>
+              <th class="right">Last Day Move</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="alertsBody"></tbody>
+        </table>
+        <div class="empty-state" id="alertsEmpty" style="display:none">
+          No alerts configured yet. Add one below.
+        </div>
+      </div>
+
+      <!-- Add alert form -->
+      <div class="alert-form">
+        <span class="alert-form-label">New alert:</span>
+        <input type="text"   id="alertTicker"    placeholder="Ticker"  maxlength="10" />
+        <input type="number" id="alertThreshold" placeholder="% move"  min="0.01" step="0.01" />
+        <select id="alertDirection">
+          <option value="either">Either direction</option>
+          <option value="up">Up only</option>
+          <option value="down">Down only</option>
+        </select>
+        <button class="btn btn-ghost btn-sm" id="alertAddBtn">+ Add Alert</button>
+      </div>
+
+      <div class="check-row">
+        <span class="check-as-of" id="alertsAsOf"></span>
+        <button class="btn btn-primary" id="checkBtn">Check Alerts Now</button>
+      </div>
+    </div>
+
+    <div class="error-banner" id="alertsError"></div>
+    <div class="loading" id="alertsLoading">
+      <div class="spinner"></div>
+      <span>Checking alerts…</span>
+    </div>
+
+  </div><!-- /tab-alerts -->
+
+</div><!-- /container -->
 
 <script>
-  // ── State ────────────────────────────────────────────────
-  // positions: [{ticker: string, weight: number (percent)}]
+  // ══════════════════════════════════════════════════
+  // Tab switching
+  // ══════════════════════════════════════════════════
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+    });
+  });
+
+  // ══════════════════════════════════════════════════
+  // MONITOR TAB
+  // ══════════════════════════════════════════════════
   let positions = [];
 
-  // ── DOM refs ─────────────────────────────────────────────
   const fileInput      = document.getElementById('fileInput');
   const uploadFileName = document.getElementById('uploadFileName');
   const uploadStatus   = document.getElementById('uploadStatus');
@@ -379,53 +549,46 @@
   const addTicker      = document.getElementById('addTicker');
   const addWeight      = document.getElementById('addWeight');
   const addBtn         = document.getElementById('addBtn');
-  const loading        = document.getElementById('loading');
-  const errorBanner    = document.getElementById('errorBanner');
-  const results        = document.getElementById('results');
+  const monitorLoading = document.getElementById('monitorLoading');
+  const monitorError   = document.getElementById('monitorError');
+  const monitorResults = document.getElementById('monitorResults');
   const reanalyzeBtn   = document.getElementById('reanalyzeBtn');
 
-  // ── File upload ──────────────────────────────────────────
+  // File upload
   fileInput.addEventListener('change', async () => {
     const f = fileInput.files[0];
     if (!f) return;
     uploadFileName.textContent = f.name;
-    uploadStatus.textContent = 'Parsing…';
-    uploadStatus.className = 'upload-status';
+    uploadStatus.textContent   = 'Parsing…';
+    uploadStatus.className     = 'upload-status';
 
     const form = new FormData();
     form.append('file', f);
-
     try {
       const res  = await fetch('/upload', { method: 'POST', body: form });
       const data = await res.json();
       if (!res.ok || data.error) {
         uploadStatus.textContent = data.error || 'Parse error';
-        uploadStatus.className = 'upload-status err';
+        uploadStatus.className   = 'upload-status err';
         return;
       }
-      // Merge: keep existing manual positions, replace any matching tickers
-      const incoming = data.positions; // [{ticker, weight}]
-      incoming.forEach(p => {
+      data.positions.forEach(p => {
         const idx = positions.findIndex(x => x.ticker === p.ticker);
         if (idx >= 0) positions[idx].weight = p.weight;
         else positions.push({ ticker: p.ticker, weight: p.weight });
       });
-      uploadStatus.textContent = `Loaded ${incoming.length} position${incoming.length !== 1 ? 's' : ''}`;
-      uploadStatus.className = 'upload-status ok';
+      uploadStatus.textContent = `Loaded ${data.positions.length} position${data.positions.length !== 1 ? 's' : ''}`;
+      uploadStatus.className   = 'upload-status ok';
       renderEditor();
     } catch (e) {
       uploadStatus.textContent = 'Network error';
-      uploadStatus.className = 'upload-status err';
+      uploadStatus.className   = 'upload-status err';
     }
-
-    // Reset so the same file can be re-uploaded
     fileInput.value = '';
   });
 
-  // ── Editor rendering ─────────────────────────────────────
   function renderEditor() {
     editorBody.innerHTML = '';
-
     positions.forEach((pos, i) => {
       const tr = document.createElement('tr');
       tr.innerHTML = `
@@ -437,28 +600,22 @@
             <span class="weight-input-suffix">%</span>
           </div>
         </td>
-        <td>
-          <button class="btn btn-danger btn-sm delete-btn" data-idx="${i}">✕</button>
-        </td>
+        <td><button class="btn btn-danger btn-sm delete-btn" data-idx="${i}">✕</button></td>
       `;
       editorBody.appendChild(tr);
     });
 
-    // Weight inputs → live update
     editorBody.querySelectorAll('.weight-input').forEach(inp => {
       inp.addEventListener('input', () => {
-        const idx = parseInt(inp.dataset.idx, 10);
         const val = parseFloat(inp.value);
-        if (!isNaN(val) && val >= 0) positions[idx].weight = val;
+        if (!isNaN(val) && val >= 0) positions[parseInt(inp.dataset.idx, 10)].weight = val;
         updateWeightSummary();
       });
     });
 
-    // Delete buttons
     editorBody.querySelectorAll('.delete-btn').forEach(btn => {
       btn.addEventListener('click', () => {
-        const idx = parseInt(btn.dataset.idx, 10);
-        positions.splice(idx, 1);
+        positions.splice(parseInt(btn.dataset.idx, 10), 1);
         renderEditor();
       });
     });
@@ -468,9 +625,7 @@
 
   function updateWeightSummary() {
     const total = positions.reduce((s, p) => s + p.weight, 0);
-    const disp  = total.toFixed(2) + '%';
-    weightTotal.textContent = disp;
-
+    weightTotal.textContent = total.toFixed(2) + '%';
     if (total > 100.05) {
       weightTotal.className = 'weight-total over';
       weightHint.textContent = `Over by ${(total - 100).toFixed(2)}%`;
@@ -484,25 +639,17 @@
       weightTotal.className = 'weight-total full';
       weightHint.textContent = 'Fully allocated';
     }
-
     analyzeBtn.disabled = positions.length === 0;
   }
 
-  // ── Add position ─────────────────────────────────────────
   function addPosition() {
     const ticker = addTicker.value.trim().toUpperCase();
     const weight = parseFloat(addWeight.value);
-
     if (!ticker) { addTicker.focus(); return; }
     if (isNaN(weight) || weight <= 0) { addWeight.focus(); return; }
-
-    const existing = positions.findIndex(p => p.ticker === ticker);
-    if (existing >= 0) {
-      positions[existing].weight = weight;
-    } else {
-      positions.push({ ticker, weight });
-    }
-
+    const idx = positions.findIndex(p => p.ticker === ticker);
+    if (idx >= 0) positions[idx].weight = weight;
+    else positions.push({ ticker, weight });
     addTicker.value = '';
     addWeight.value = '';
     addTicker.focus();
@@ -513,16 +660,12 @@
   addTicker.addEventListener('keydown', e => { if (e.key === 'Enter') addWeight.focus(); });
   addWeight.addEventListener('keydown', e => { if (e.key === 'Enter') addPosition(); });
 
-  // ── Analyze ──────────────────────────────────────────────
   async function runAnalysis() {
-    if (positions.length === 0) return;
-
-    hideError();
-    loading.style.display = 'flex';
-    results.style.display = 'none';
-    analyzeBtn.disabled   = true;
-    reanalyzeBtn.disabled = true;
-
+    if (!positions.length) return;
+    hideError(monitorError);
+    monitorLoading.style.display  = 'flex';
+    monitorResults.style.display  = 'none';
+    analyzeBtn.disabled = reanalyzeBtn.disabled = true;
     try {
       const res  = await fetch('/analyze', {
         method: 'POST',
@@ -530,14 +673,13 @@
         body: JSON.stringify({ positions }),
       });
       const data = await res.json();
-
-      if (!res.ok || data.error) { showError(data.error || 'Unknown error'); return; }
+      if (!res.ok || data.error) { showError(monitorError, data.error || 'Unknown error'); return; }
       renderResults(data);
     } catch (e) {
-      showError('Network error: ' + e.message);
+      showError(monitorError, 'Network error: ' + e.message);
     } finally {
-      loading.style.display = 'none';
-      analyzeBtn.disabled   = positions.length === 0;
+      monitorLoading.style.display = 'none';
+      analyzeBtn.disabled = positions.length === 0;
       reanalyzeBtn.disabled = false;
     }
   }
@@ -545,7 +687,221 @@
   analyzeBtn.addEventListener('click', runAnalysis);
   reanalyzeBtn.addEventListener('click', runAnalysis);
 
-  // ── Results rendering ─────────────────────────────────────
+  function renderResults(data) {
+    fmtCard(data.portfolio.day,   'portDay');
+    fmtCard(data.portfolio.week,  'portWeek');
+    fmtCard(data.portfolio.month, 'portMonth');
+    fmtCard(data.portfolio.ytd,   'portYTD');
+    document.getElementById('monitorAsOf').textContent = 'As of ' + data.as_of;
+    document.getElementById('totalWeight').textContent = 'Total weight: ' + data.total_weight.toFixed(2) + '%';
+
+    const maxW  = Math.max(...data.positions.map(p => p.weight || 0));
+    const tbody = document.getElementById('positionsBody');
+    tbody.innerHTML = '';
+
+    data.positions.forEach(pos => {
+      const tr = document.createElement('tr');
+      if (pos.error) {
+        tr.innerHTML = `
+          <td class="ticker-cell"><strong>${escHtml(pos.ticker)}</strong></td>
+          <td class="right">—</td><td>—</td>
+          <td class="right" colspan="4" style="color:#f87171;font-size:0.8rem">${escHtml(pos.error)}</td>
+        `;
+      } else {
+        const bar = maxW > 0 ? (pos.weight / maxW * 100) : 0;
+        tr.innerHTML = `
+          <td class="ticker-cell">
+            <strong>${escHtml(pos.ticker)}</strong>
+            <small>${escHtml(pos.name !== pos.ticker ? pos.name : '')}</small>
+          </td>
+          <td class="right">$${pos.current_price.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}</td>
+          <td>
+            <div class="weight-bar-wrap">
+              <div class="weight-bar"><div class="weight-bar-fill" style="width:${bar}%"></div></div>
+              <span class="weight-pct">${pos.weight.toFixed(2)}%</span>
+            </div>
+          </td>
+          <td class="right">${fmt(pos.day)}</td>
+          <td class="right">${fmt(pos.week)}</td>
+          <td class="right">${fmt(pos.month)}</td>
+          <td class="right">${fmt(pos.ytd)}</td>
+        `;
+      }
+      tbody.appendChild(tr);
+    });
+
+    monitorResults.style.display = 'block';
+    monitorResults.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  // ══════════════════════════════════════════════════
+  // ALERTS TAB
+  // ══════════════════════════════════════════════════
+  const alertTicker    = document.getElementById('alertTicker');
+  const alertThreshold = document.getElementById('alertThreshold');
+  const alertDirection = document.getElementById('alertDirection');
+  const alertAddBtn    = document.getElementById('alertAddBtn');
+  const checkBtn       = document.getElementById('checkBtn');
+  const alertsLoading  = document.getElementById('alertsLoading');
+  const alertsError    = document.getElementById('alertsError');
+  const alertsBody     = document.getElementById('alertsBody');
+  const alertsEmpty    = document.getElementById('alertsEmpty');
+  const triggeredBanner= document.getElementById('triggeredBanner');
+  const triggeredCount = document.getElementById('triggeredCount');
+  const triggeredBody  = document.getElementById('triggeredBody');
+  const alertsAsOf     = document.getElementById('alertsAsOf');
+
+  // Tracks last check results keyed by alert id
+  let lastCheckMap = {};
+
+  async function loadAlerts() {
+    try {
+      const res  = await fetch('/alerts');
+      const data = await res.json();
+      renderAlertsTable(data);
+    } catch (e) {
+      showError(alertsError, 'Could not load alerts');
+    }
+  }
+
+  function renderAlertsTable(alerts, checkMap) {
+    if (checkMap) lastCheckMap = checkMap;
+    alertsBody.innerHTML = '';
+
+    if (!alerts.length) {
+      alertsEmpty.style.display = 'block';
+      return;
+    }
+    alertsEmpty.style.display = 'none';
+
+    alerts.forEach(alert => {
+      const checked     = lastCheckMap[alert.id];
+      const dayReturn   = checked?.day_return ?? null;
+      const isTriggered = checked?.triggered  ?? false;
+
+      const tr = document.createElement('tr');
+      if (isTriggered) tr.classList.add('triggered-row');
+
+      tr.innerHTML = `
+        <td class="ticker-cell"><strong>${escHtml(alert.ticker)}</strong></td>
+        <td><span class="direction-badge ${alert.direction}">${dirLabel(alert.direction)}</span></td>
+        <td class="right">&ge; ${alert.threshold.toFixed(2)}%</td>
+        <td class="right">${dayReturn !== null && dayReturn !== undefined ? fmt(dayReturn) : '<span class="pill neutral">—</span>'}</td>
+        <td><button class="btn btn-danger btn-sm del-alert-btn" data-id="${escHtml(alert.id)}">✕</button></td>
+      `;
+      alertsBody.appendChild(tr);
+    });
+
+    alertsBody.querySelectorAll('.del-alert-btn').forEach(btn => {
+      btn.addEventListener('click', () => deleteAlert(btn.dataset.id));
+    });
+  }
+
+  async function addAlert() {
+    const ticker    = alertTicker.value.trim().toUpperCase();
+    const threshold = parseFloat(alertThreshold.value);
+    const direction = alertDirection.value;
+    if (!ticker)             { alertTicker.focus(); return; }
+    if (isNaN(threshold) || threshold <= 0) { alertThreshold.focus(); return; }
+
+    try {
+      const res = await fetch('/alerts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ticker, threshold, direction }),
+      });
+      const data = await res.json();
+      if (!res.ok || data.error) { showError(alertsError, data.error || 'Error adding alert'); return; }
+      alertTicker.value    = '';
+      alertThreshold.value = '';
+      hideError(alertsError);
+      loadAlerts();
+    } catch (e) {
+      showError(alertsError, 'Network error: ' + e.message);
+    }
+  }
+
+  async function deleteAlert(id) {
+    try {
+      await fetch('/alerts/' + id, { method: 'DELETE' });
+      delete lastCheckMap[id];
+      loadAlerts();
+    } catch (e) {
+      showError(alertsError, 'Error deleting alert');
+    }
+  }
+
+  async function checkAlerts() {
+    hideError(alertsError);
+    alertsLoading.style.display = 'flex';
+    checkBtn.disabled = true;
+    try {
+      const res  = await fetch('/alerts/check');
+      const data = await res.json();
+      if (!res.ok || data.error) { showError(alertsError, data.error || 'Check failed'); return; }
+
+      alertsAsOf.textContent = 'Last checked: ' + data.as_of;
+
+      // Build per-id check map
+      const checkMap = {};
+      data.checked.forEach(item => {
+        checkMap[item.id] = { ...item, triggered: false };
+      });
+      data.triggered.forEach(item => {
+        if (checkMap[item.id]) checkMap[item.id].triggered = true;
+      });
+
+      lastCheckMap = checkMap;
+
+      // Re-render table with check results
+      const allAlerts = data.checked.map(({ id, ticker, threshold, direction }) =>
+        ({ id, ticker, threshold, direction })
+      );
+      renderAlertsTable(allAlerts, checkMap);
+
+      // Triggered banner
+      if (data.triggered.length > 0) {
+        triggeredCount.textContent = data.triggered.length;
+        triggeredBody.innerHTML    = '';
+        data.triggered.forEach(item => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td class="ticker-cell"><strong>${escHtml(item.ticker)}</strong></td>
+            <td class="right">${item.current_price != null ? '$' + item.current_price.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}) : '—'}</td>
+            <td><span class="direction-badge ${item.direction}">${dirLabel(item.direction)}</span></td>
+            <td class="right">&ge; ${item.threshold.toFixed(2)}%</td>
+            <td class="right">${fmt(item.day_return)}</td>
+          `;
+          triggeredBody.appendChild(tr);
+        });
+        triggeredBanner.style.display = 'block';
+      } else {
+        triggeredBanner.style.display = 'none';
+      }
+
+    } catch (e) {
+      showError(alertsError, 'Network error: ' + e.message);
+    } finally {
+      alertsLoading.style.display = 'none';
+      checkBtn.disabled = false;
+    }
+  }
+
+  alertAddBtn.addEventListener('click', addAlert);
+  alertTicker.addEventListener('keydown', e => { if (e.key === 'Enter') alertThreshold.focus(); });
+  alertThreshold.addEventListener('keydown', e => { if (e.key === 'Enter') addAlert(); });
+  checkBtn.addEventListener('click', checkAlerts);
+
+  // Load alerts when switching to the tab
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (btn.dataset.tab === 'alerts') loadAlerts();
+    });
+  });
+
+  // ══════════════════════════════════════════════════
+  // Shared helpers
+  // ══════════════════════════════════════════════════
   function fmt(val) {
     if (val === null || val === undefined) return '<span class="pill neutral">N/A</span>';
     const cls  = val > 0 ? 'positive' : val < 0 ? 'negative' : 'neutral';
@@ -561,59 +917,12 @@
     el.className   = 'value ' + (val > 0 ? 'positive' : val < 0 ? 'negative' : 'neutral');
   }
 
-  function renderResults(data) {
-    fmtCard(data.portfolio.day,   'portDay');
-    fmtCard(data.portfolio.week,  'portWeek');
-    fmtCard(data.portfolio.month, 'portMonth');
-    fmtCard(data.portfolio.ytd,   'portYTD');
-
-    document.getElementById('asOf').textContent = 'As of ' + data.as_of;
-    document.getElementById('totalWeight').textContent =
-      'Total weight: ' + data.total_weight.toFixed(2) + '%';
-
-    const maxWeight = Math.max(...data.positions.map(p => p.weight || 0));
-    const tbody     = document.getElementById('positionsBody');
-    tbody.innerHTML = '';
-
-    data.positions.forEach(pos => {
-      const tr = document.createElement('tr');
-      if (pos.error) {
-        tr.innerHTML = `
-          <td class="ticker-cell"><strong>${escHtml(pos.ticker)}</strong></td>
-          <td class="right">—</td>
-          <td>—</td>
-          <td class="right error-cell" colspan="4">${escHtml(pos.error)}</td>
-        `;
-      } else {
-        const barPct = maxWeight > 0 ? (pos.weight / maxWeight * 100) : 0;
-        tr.innerHTML = `
-          <td class="ticker-cell">
-            <strong>${escHtml(pos.ticker)}</strong>
-            <small>${escHtml(pos.name !== pos.ticker ? pos.name : '')}</small>
-          </td>
-          <td class="right">$${pos.current_price.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}</td>
-          <td>
-            <div class="weight-bar-wrap">
-              <div class="weight-bar"><div class="weight-bar-fill" style="width:${barPct}%"></div></div>
-              <span class="weight-pct">${pos.weight.toFixed(2)}%</span>
-            </div>
-          </td>
-          <td class="right">${fmt(pos.day)}</td>
-          <td class="right">${fmt(pos.week)}</td>
-          <td class="right">${fmt(pos.month)}</td>
-          <td class="right">${fmt(pos.ytd)}</td>
-        `;
-      }
-      tbody.appendChild(tr);
-    });
-
-    results.style.display = 'block';
-    results.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  function dirLabel(d) {
+    return d === 'up' ? '▲ Up' : d === 'down' ? '▼ Down' : '▲▼ Either';
   }
 
-  // ── Helpers ───────────────────────────────────────────────
-  function showError(msg) { errorBanner.textContent = msg; errorBanner.style.display = 'block'; }
-  function hideError()    { errorBanner.style.display = 'none'; }
+  function showError(el, msg) { el.textContent = msg; el.style.display = 'block'; }
+  function hideError(el)      { el.style.display = 'none'; }
 
   function escHtml(s) {
     return String(s)
