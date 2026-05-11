@@ -1,0 +1,8 @@
+[
+  {
+    "id": "ed3687c6-5394-4ad0-9140-6401cec936e8",
+    "ticker": "SNDK",
+    "threshold": 5.0,
+    "direction": "either"
+  }
+]

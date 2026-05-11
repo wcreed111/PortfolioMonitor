@@ -189,7 +189,7 @@ def do_register():
     try:
         db.execute(
             'INSERT INTO users (username, password_hash, created_at) VALUES (?, ?, ?)',
-            (username, generate_password_hash(password), datetime.now().isoformat())
+            (username, generate_password_hash(password, method='pbkdf2:sha256'), datetime.now().isoformat())
         )
         db.commit()
     except sqlite3.IntegrityError:
